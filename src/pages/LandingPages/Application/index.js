@@ -93,15 +93,26 @@ function Application() {
   //   const { name, files } = e.target;
   //   setFormData((prevData) => ({ ...prevData, [name]: files[0] }));
   // };
-  const handleChange = (e) => {
-    const { name, files, value } = e.target;
 
-    // Update the formData state
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: files ? files[0] : value, // Handle file input or regular input field
-    }));
+  const handleFileChange = (event, fieldName) => {
+    const file = event.target.files[0]; // Get the selected file
+    if (file) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [fieldName]: file, // Update state with the selected file
+      }));
+    }
   };
+
+  // const handleChange = (e) => {
+  //   const { name, files, value } = e.target;
+
+  //   // Update the formData state
+  //   setFormData((prevState) => ({
+  //     ...prevState,
+  //     [name]: files ? files[0] : value, // Handle file input or regular input field
+  //   }));
+  // };
 
   const handleNext = () => setStep((prev) => prev + 1);
   const handlePrevious = () => setStep((prev) => prev - 1);
@@ -158,6 +169,7 @@ function Application() {
         ticketFile: null,
         hotelBookingFile: null,
       });
+      handleNext(); 
     } catch (error) {
       // Handle the error case
       console.error("Upload failed", error);
@@ -557,9 +569,8 @@ function Application() {
                             startIcon={<CloudUploadIcon />}
                             sx={{
                               height: 90,
-                              // width:250,// Reduced height from 150px to 80px
-                              padding: "8px", // Adjust padding for a more compact look
-                              fontSize: "0.875rem", // Smaller font size
+                              padding: "8px",
+                              fontSize: "0.875rem",
                               display: "flex",
                               flexDirection: "column",
                               justifyContent: "center",
@@ -569,12 +580,30 @@ function Application() {
                               "&:hover": { backgroundColor: "#e0e0e0" },
                             }}
                           >
-                            {file.label}
-                            <VisuallyHiddenInput type="file" name={file.name} onChange={handleChange} />
+                            {formData[file.name] ? (
+                              <>
+                                ✅ {formData[file.name].name}
+                              </>
+                            ) : (
+                              file.label
+                            )}
+                            <VisuallyHiddenInput
+                              type="file"
+                              name={file.name}
+                              onChange={(e) => handleFileChange(e, file.name)}
+                            />
                           </Button>
+
+                          {/* Display the uploaded file name below the button */}
+                          {formData[file.name] && (
+                            <Typography variant="body2" sx={{ mt: 1, textAlign: "center", color: "#1976d2" }}>
+                              {formData[file.name].name}
+                            </Typography>
+                          )}
                         </Grid>
                       ))}
                     </Grid>
+
                     <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
                       <Button
                         variant="outlined"
@@ -582,33 +611,32 @@ function Application() {
                         sx={{
                           mt: 2,
                           mr: 1,
-                          color: "#1976d2", // Primary blue text color
-                          border: "1px solid #1976d2", // Blue border instead of pink
+                          color: "#1976d2",
+                          border: "1px solid #1976d2",
                           "&:hover": {
-                            backgroundColor: "rgba(25, 118, 210, 0.08)", // Light blue background on hover
-                            borderColor: "#1565c0", // Darker blue border on hover
+                            backgroundColor: "rgba(25, 118, 210, 0.08)",
+                            borderColor: "#1565c0",
                           },
-                          "&:focus": { outline: "none" }, // Removes focus outline
-                          "&:active": { border: "1px solid #bdbdbd", color: "#333" }, // Ash border on click
+                          "&:focus": { outline: "none" },
+                          "&:active": { border: "1px solid #bdbdbd", color: "#333" },
                         }}
                         startIcon={<ArrowBackIcon />}
                       >
                         Previous
                       </Button>
+
                       <Button
                         variant="contained"
                         onClick={handleSubmit}
                         sx={{
                           mt: 2,
-                          color: "white", // Ensure text is clearly visible
-                          backgroundColor: "#1976d2", // Primary blue background
-                          "&:hover": {
-                            backgroundColor: "#1565c0", // Darker blue on hover
-                          },
-                          "&:focus": { outline: "none" }, // Removes focus outline
+                          color: "white",
+                          backgroundColor: "#1976d2",
+                          "&:hover": { backgroundColor: "#1565c0" },
+                          "&:focus": { outline: "none" },
                           "&:active": {
                             backgroundColor: "#1565c0",
-                            border: "1px solid #bdbdbd", // Ash-colored border on click
+                            border: "1px solid #bdbdbd",
                           },
                         }}
                         endIcon={<ArrowForwardIcon />}
@@ -616,9 +644,9 @@ function Application() {
                         Submit
                       </Button>
                     </Box>
-
                   </>
                 )}
+
                 {step === 5 && (
                   <>
                     <Typography variant="h6" mt={2}>
@@ -678,11 +706,7 @@ function Application() {
                         </>
                       )}
 
-                      {paymentMethod === "paypal" && (
-                        <Grid item xs={12}>
-                          <Typography variant="body1">Please login to your PayPal account to complete the payment.</Typography>
-                        </Grid>
-                      )}
+                    
 
                       {paymentMethod === "bank-transfer" && (
                         <Grid item xs={12}>
