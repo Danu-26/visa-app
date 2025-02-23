@@ -19,6 +19,7 @@ import CenteredBlogCard from "examples/Cards/BlogCards/CenteredBlogCard";
 import MKBox from "components/MKBox";
 import MKTypography from "components/MKTypography";
 
+import axios from "axios";
 
 // Material Kit 2 React examples
 import DefaultNavbar from "examples/DefaultNavbar";
@@ -77,29 +78,92 @@ function Application() {
     address: "",
     travelFrom: "",
     travelTo: "",
-    passportCopy: null,
-    photo: null,
-    ticket: null,
-    hotelBooking: null,
+    passportFile: null,
+    photoFile: null,
+    ticketFile: null,
+    hotelBookingFile: null,
   });
 
-  const handleChange = (e) => {
+  const handleChangeforText = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleFileChange = (e) => {
-    const { name, files } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: files[0] }));
+  // const handleFileChange = (e) => {
+  //   const { name, files } = e.target;
+  //   setFormData((prevData) => ({ ...prevData, [name]: files[0] }));
+  // };
+  const handleChange = (e) => {
+    const { name, files, value } = e.target;
+
+    // Update the formData state
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: files ? files[0] : value, // Handle file input or regular input field
+    }));
   };
 
   const handleNext = () => setStep((prev) => prev + 1);
   const handlePrevious = () => setStep((prev) => prev - 1);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-  };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Create FormData object
+    const data = new FormData();
+
+    // Append file fields to FormData
+    Object.keys(formData).forEach((key) => {
+      if (formData[key] && key.includes("File")) { // Check for file keys
+        data.append(key, formData[key]);
+      }
+    });
+
+    // Append other form fields
+    const { visaType, firstName, lastName, email, mobileNumber, passportNumber, nationality, address, travelFrom, travelTo } = formData;
+    data.append("visaType", visaType);
+    data.append("firstName", firstName);
+    data.append("lastName", lastName);
+    data.append("email", email);
+    data.append("mobileNumber", mobileNumber);
+    data.append("passportNumber", passportNumber);
+    data.append("nationality", nationality);
+    data.append("address", address);
+    data.append("travelFrom", travelFrom);
+    data.append("travelTo", travelTo);
+
+    try {
+      // Make the POST request with the FormData
+      await axios.post("http://localhost:5001/api/visa/upload", data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      // Handle the success case
+      alert("Files uploaded successfully!");
+
+      // Reset formData after successful upload
+      setFormData({
+        visaType: "",
+        firstName: "",
+        lastName: "",
+        email: "",
+        mobileNumber: "",
+        passportNumber: "",
+        nationality: "",
+        address: "",
+        travelFrom: "",
+        travelTo: "",
+        passportFile: null,
+        photoFile: null,
+        ticketFile: null,
+        hotelBookingFile: null,
+      });
+    } catch (error) {
+      // Handle the error case
+      console.error("Upload failed", error);
+      alert("Upload failed. Please try again.");
+    }
+  };
 
 
 
@@ -210,36 +274,25 @@ function Application() {
               <form onSubmit={handleSubmit}>
                 {step === 1 && (
                   <>
-                    <FormControl fullWidth margin="normal" sx={{ minWidth: 120 }}>
-                      <InputLabel shrink={formData.visaType !== ''} sx={{ top: 0, left: 14 }}>Visa Type</InputLabel>
+                    <FormControl fullWidth>
                       <Select
-                        name="visaType"
-                        value={formData.visaType}
-                        onChange={handleChange}
-                        required
+                        value={formData.visaType || ''} // Make sure this is bound to your state
+                        onChange={handleChangeforText} // Handle the change correctly
+                        displayEmpty
+                        name="visaType" // Ensure this corresponds to your state field
                         sx={{
-                          '& .MuiSelect-select': {
-                            padding: '10px 14px', // Adjust padding if needed
-                            height: '40px', // Set desired height
-                            display: 'flex',
-                            alignItems: 'center', // Centers the text vertically
-                          },
-                          '& .MuiInputBase-root': {
-                            height: '56px', // Ensure the overall height is set for the root (including label)
-                            display: 'flex',
-                            alignItems: 'center', // Centers the text vertically
-                          },
-                          '& .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'rgba(0, 0, 0, 0.23)', // Border color on focus
-                          },
-                          '&:hover .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'rgba(0, 0, 0, 0.87)', // Border color on hover
-                          },
-                          '& .MuiInputLabel-root': {
-                            lineHeight: 1, // Ensures label stays in place
+                          minHeight: 50,
+                          borderRadius: '8px',
+                          border: '1px solid transparent',
+                          transition: 'border 0.3s ease-in-out',
+                          '&:hover': {
+                            border: '1px solid #d3d3d3', // Light ash border on hover
                           },
                         }}
                       >
+                        <MenuItem value="" disabled>
+                          -- Select Visa Type --
+                        </MenuItem>
                         {visaTypes.map((type) => (
                           <MenuItem key={type} value={type}>
                             {type}
@@ -247,6 +300,13 @@ function Application() {
                         ))}
                       </Select>
                     </FormControl>
+
+
+
+
+
+
+
 
 
                     <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
@@ -281,7 +341,7 @@ function Application() {
                       fullWidth
                       label="First Name"
                       name="firstName"
-                      onChange={handleChange}
+                      onChange={handleChangeforText}
                       required
                       margin="normal"
                     />
@@ -289,7 +349,7 @@ function Application() {
                       fullWidth
                       label="Last Name"
                       name="lastName"
-                      onChange={handleChange}
+                      onChange={handleChangeforText}
                       required
                       margin="normal"
                     />
@@ -298,7 +358,7 @@ function Application() {
                       label="Email"
                       name="email"
                       type="email"
-                      onChange={handleChange}
+                      onChange={handleChangeforText}
                       required
                       margin="normal"
                     />
@@ -306,7 +366,7 @@ function Application() {
                       fullWidth
                       label="Mobile Number"
                       name="mobileNumber"
-                      onChange={handleChange}
+                      onChange={handleChangeforText}
                       required
                       margin="normal"
                     />
@@ -314,7 +374,7 @@ function Application() {
                       fullWidth
                       label="Passport Number"
                       name="passportNumber"
-                      onChange={handleChange}
+                      onChange={handleChangeforText}
                       required
                       margin="normal"
                     />
@@ -324,7 +384,7 @@ function Application() {
                       <Select
                         name="nationality"
                         value={formData.nationality}
-                        onChange={handleChange}
+                        onChange={handleChangeforText}
                         required
                         sx={{
                           '& .MuiSelect-select': {
@@ -357,7 +417,7 @@ function Application() {
                       fullWidth
                       label="Address"
                       name="address"
-                      onChange={handleChange}
+                      onChange={handleChangeforText}
                       required
                       margin="normal"
                     />
@@ -416,7 +476,7 @@ function Application() {
                       label="Travel From"
                       name="travelFrom"
                       type="date"
-                      onChange={handleChange}
+                      onChange={handleChangeforText}
                       required
                       margin="normal"
                       InputLabelProps={{ shrink: true }} // Ensures label is visible
@@ -426,7 +486,7 @@ function Application() {
                       label="Travel To"
                       name="travelTo"
                       type="date"
-                      onChange={handleChange}
+                      onChange={handleChangeforText}
                       required
                       margin="normal"
                       InputLabelProps={{ shrink: true }}
@@ -484,10 +544,10 @@ function Application() {
 
                     <Grid container spacing={2} sx={{ mt: 2 }}>
                       {[
-                        { name: "passportCopy", label: "Upload Passport Copy" },
-                        { name: "photo", label: "Upload Photo" },
-                        { name: "ticket", label: "Upload Ticket" },
-                        { name: "hotelBooking", label: "Upload Hotel Booking" },
+                        { name: "passportFile", label: "Upload Passport Copy" },
+                        { name: "photoFile", label: "Upload Photo" },
+                        { name: "ticketFile", label: "Upload Ticket" },
+                        { name: "hotelBookingFile", label: "Upload Hotel Booking" },
                       ].map((file, index) => (
                         <Grid item xs={12} sm={6} key={index}>
                           <Button
@@ -510,7 +570,7 @@ function Application() {
                             }}
                           >
                             {file.label}
-                            <VisuallyHiddenInput type="file" name={file.name} onChange={handleFileChange} />
+                            <VisuallyHiddenInput type="file" name={file.name} onChange={handleChange} />
                           </Button>
                         </Grid>
                       ))}
@@ -537,7 +597,7 @@ function Application() {
                       </Button>
                       <Button
                         variant="contained"
-                        onClick={handleNext}
+                        onClick={handleSubmit}
                         sx={{
                           mt: 2,
                           color: "white", // Ensure text is clearly visible
