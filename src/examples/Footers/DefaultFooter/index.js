@@ -6,7 +6,6 @@ import MKBox from "components/MKBox";
 import MKTypography from "components/MKTypography";
 
 function DefaultFooter({ content = {} }) {
-  // Ensure content properties have default values to prevent errors
   const { brand = {}, socials = [], menus = [], copyright = "" } = content;
 
   return (
@@ -20,7 +19,7 @@ function DefaultFooter({ content = {} }) {
                   component="img"
                   src={brand.image}
                   alt={brand.name || "Brand"}
-                  sx={{ width: 150, height: "auto", mb: 2 }} // Increased logo size
+                  sx={{ width: 150, height: "auto", mb: 2 }}
                 />
               </Link>
               <MKTypography variant="h6" fontWeight="bold">
@@ -37,12 +36,10 @@ function DefaultFooter({ content = {} }) {
               <MKBox component="ul" p={0} m={0} sx={{ listStyle: "none", paddingLeft: 0 }}>
                 {items.map(({ name, route, href }) => (
                   <MKBox key={name} component="li" sx={{ mb: 1 }}>
-                    {href ? (
+                    {route ? ( // Internal SPA navigation
                       <MKTypography
-                        component="a"
-                        href={href}
-                        target="_blank"
-                        rel="noreferrer"
+                        component={Link}
+                        to={route}
                         variant="button"
                         fontWeight="regular"
                         textTransform="capitalize"
@@ -50,10 +47,12 @@ function DefaultFooter({ content = {} }) {
                       >
                         {name}
                       </MKTypography>
-                    ) : (
+                    ) : ( // External links open in a new tab
                       <MKTypography
-                        component={Link}
-                        to={route || "#"}
+                        component="a"
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         variant="button"
                         fontWeight="regular"
                         textTransform="capitalize"
@@ -76,7 +75,7 @@ function DefaultFooter({ content = {} }) {
                   component="a"
                   href={link}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   variant="h5"
                   color="dark"
                   sx={{
@@ -120,13 +119,13 @@ DefaultFooter.propTypes = {
         items: PropTypes.arrayOf(
           PropTypes.shape({
             name: PropTypes.string,
-            route: PropTypes.string,
-            href: PropTypes.string,
+            route: PropTypes.string, // For SPA navigation
+            href: PropTypes.string, // For external links
           })
         ),
       })
     ),
-    copyright: PropTypes.string,
+    copyright: PropTypes.node,
   }),
 };
 

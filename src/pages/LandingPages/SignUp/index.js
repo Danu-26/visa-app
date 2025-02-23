@@ -1,4 +1,3 @@
-// import { useState } from "react";
 import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
@@ -6,17 +5,13 @@ import MKBox from "components/MKBox";
 import MKTypography from "components/MKTypography";
 import MKInput from "components/MKInput";
 import MKButton from "components/MKButton";
-import DefaultNavbar from "examples/DefaultNavbar/index";
-import DefaultFooter from "examples/Footers/DefaultFooter";
-import routes from "routes";
+
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 
 function SignUp() {
-  // const [formData, setFormData] = useState({ name: "", email: "", password: "", confirmPassword: "" });
-
   return (
     <>
-      <DefaultNavbar routes={routes} transparent light />
+
       <MKBox
         position="absolute"
         top={0}
@@ -61,9 +56,7 @@ function SignUp() {
           </Grid>
         </Grid>
       </MKBox>
-      <MKBox width="100%" position="absolute" bottom="1.625rem">
-        <DefaultFooter light />
-      </MKBox>
+   
     </>
   );
 }

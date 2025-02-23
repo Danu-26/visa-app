@@ -5,7 +5,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import DefaultNavbar from "examples/DefaultNavbar";
-import Contact from "pages/LandingPages/Track/sections/Contact";
+// import Contact from "pages/LandingPages/Track/sections/Contact";
 import Footer from "pages/LandingPages/Track/sections/Footer";
 import routes from "routes";
 // import bgImage from "assets/images/city-profile.jpg";
@@ -78,8 +78,8 @@ function Track() {
           </Button>
         </Card>
       </Box>
-
-      <Contact />
+{/* 
+      <Contact /> */}
       <Footer />
     </>
   );

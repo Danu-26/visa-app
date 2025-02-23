@@ -14,35 +14,19 @@ Coded by www.creative-tim.com
 */
 
 import { useState } from "react";
-
-// react-router-dom components
 import { Link } from "react-router-dom";
-
-// @mui material components
 import Card from "@mui/material/Card";
 import Switch from "@mui/material/Switch";
 import Grid from "@mui/material/Grid";
 import MuiLink from "@mui/material/Link";
-
-// @mui icons
 import FacebookIcon from "@mui/icons-material/Facebook";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import GoogleIcon from "@mui/icons-material/Google";
-
-// Material Kit 2 React components
 import MKBox from "components/MKBox";
 import MKTypography from "components/MKTypography";
 import MKInput from "components/MKInput";
 import MKButton from "components/MKButton";
 
-// Material Kit 2 React example components
-import DefaultNavbar from "examples/DefaultNavbar/index";
-import DefaultFooter from "examples/Footers/DefaultFooter";
-
-// Material Kit 2 React page layout routes
-import routes from "routes";
-
-// Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 
 function SignIn() {
@@ -52,24 +36,16 @@ function SignIn() {
 
   return (
     <>
-      <DefaultNavbar
-        routes={routes}
-        action={{
-          type: "external",
-          route: "https://www.creative-tim.com/product/material-kit-react",
-          label: "free download",
-          color: "info",
-        }}
-        transparent
-        light
-      />
+
+
+      {/* Background Image */}
       <MKBox
         position="absolute"
         top={0}
         left={0}
         zIndex={1}
         width="100%"
-        minHeight="100vh"
+        height="100%"
         sx={{
           backgroundImage: ({ functions: { linearGradient, rgba }, palette: { gradients } }) =>
             `${linearGradient(
@@ -81,10 +57,13 @@ function SignIn() {
           backgroundRepeat: "no-repeat",
         }}
       />
-      <MKBox px={1} width="100%" height="100vh" mx="auto" position="relative" zIndex={2}>
-        <Grid container spacing={1} justifyContent="center" alignItems="center" height="100%">
-          <Grid item xs={11} sm={9} md={5} lg={4} xl={3}>
-            <Card>
+
+      {/* Main Container */}
+      <MKBox px={1} width="100%" minHeight="100vh" mx="auto" position="relative" zIndex={2}>
+        <Grid container spacing={1} justifyContent="center" alignItems="center" sx={{ minHeight: "100vh" }}>
+          <Grid item xs={11} sm={9} md={5} lg={4} xl={3} sx={{ display: "flex", justifyContent: "center" }}>
+            <Card sx={{ width: "100%", maxWidth: 400, pb: 3 }}> {/* Added pb={3} for spacing */}
+              {/* Header */}
               <MKBox
                 variant="gradient"
                 bgColor="info"
@@ -117,6 +96,8 @@ function SignIn() {
                   </Grid>
                 </Grid>
               </MKBox>
+
+              {/* Form */}
               <MKBox pt={4} pb={3} px={3}>
                 <MKBox component="form" role="form">
                   <MKBox mb={2}>
@@ -139,10 +120,12 @@ function SignIn() {
                   </MKBox>
                   <MKBox mt={4} mb={1}>
                     <MKButton variant="gradient" color="info" fullWidth>
-                      sign in
+                      Sign in
                     </MKButton>
                   </MKBox>
-                  <MKBox mt={3} mb={1} textAlign="center">
+
+                  {/* "Don't have an account?" Section */}
+                  <MKBox mt={3} textAlign="center">
                     <MKTypography variant="button" color="text">
                       Don&apos;t have an account?{" "}
                       <MKTypography
@@ -163,9 +146,7 @@ function SignIn() {
           </Grid>
         </Grid>
       </MKBox>
-      <MKBox width="100%" position="absolute" zIndex={2} bottom="1.625rem">
-        <DefaultFooter light />
-      </MKBox>
+
     </>
   );
 }

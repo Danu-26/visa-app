@@ -1,27 +1,14 @@
-/*
-=========================================================
-* Material Kit 2 React - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-kit-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 // @mui material components
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
+import { Link } from "react-router-dom";
 
 // Material Kit 2 React components
 import MKBox from "components/MKBox";
 import MKTypography from "components/MKTypography";
+
+const date = new Date().getFullYear();
 
 function Footer() {
   return (
@@ -50,114 +37,42 @@ function Footer() {
               sx={{ listStyle: "none" }}
             >
               <MKBox component="li">
-                <MKTypography
-                  variant="button"
-                  fontWeight="regular"
-                  opacity={0.8}
-                  component={Link}
-                  href="https://www.creative-tim.com"
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <MKTypography variant="button" fontWeight="regular" opacity={0.8} component={Link} to="/">
                   Home
                 </MKTypography>
               </MKBox>
               <MKBox component="li">
-                <MKTypography
-                  variant="button"
-                  fontWeight="regular"
-                  opacity={0.8}
-                  component={Link}
-                  href="https://www.creative-tim.com/presentation"
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <MKTypography variant="button" fontWeight="regular" opacity={0.8} component={Link} to="/about">
                   About
                 </MKTypography>
               </MKBox>
               <MKBox component="li">
-                <MKTypography
-                  variant="button"
-                  fontWeight="regular"
-                  opacity={0.8}
-                  component={Link}
-                  href="https://www.creative-tim.com/blog"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Blog
+                <MKTypography variant="button" fontWeight="regular" opacity={0.8} component={Link} to="/contact">
+                  Contact Us
                 </MKTypography>
               </MKBox>
               <MKBox component="li">
-                <MKTypography
-                  variant="button"
-                  fontWeight="regular"
-                  opacity={0.8}
-                  component={Link}
-                  href="https://www.creative-tim.com"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Services
+                <MKTypography variant="button" fontWeight="regular" opacity={0.8} component={Link} to="/news">
+                  News
                 </MKTypography>
               </MKBox>
             </Stack>
             <MKTypography variant="button" opacity={0.8}>
-              Copyright © <script>document.write(new Date().getFullYear())</script>2021 Material
-              Design by Creative Tim.
+              © {date} Oriental Travels & Tours (Pvt) Ltd. All rights reserved
             </MKTypography>
           </Grid>
           <Grid item xs={12} lg={6} ml="auto" textAlign={{ xs: "center", lg: "right" }}>
             <MKTypography variant="body1" fontWeight="bold" mb={6} sx={{ fontSize: "1.125rem" }}>
-              The reward for getting on the stage is fame. The price of fame is you can&apos;t get
-              off the stage.
+              Focus on your journey, and let us handle the process.
             </MKTypography>
-            <MKTypography
-              component={Link}
-              href="#dribbble"
-              target="_blank"
-              rel="noreferrer"
-              variant="body2"
-              color="dark"
-              opacity={0.5}
-              mr={3}
-            >
-              <i className="fab fa-dribbble" />
+            <MKTypography component="a" href="#youtube" target="_blank" rel="noreferrer" variant="body2" color="dark" opacity={0.5} mr={3}>
+              <i className="fab fa-youtube" />
             </MKTypography>
-            <MKTypography
-              component={Link}
-              href="#twitter"
-              target="_blank"
-              rel="noreferrer"
-              variant="body2"
-              color="dark"
-              opacity={0.5}
-              mr={3}
-            >
+            <MKTypography component="a" href="#twitter" target="_blank" rel="noreferrer" variant="body2" color="dark" opacity={0.5} mr={3}>
               <i className="fab fa-twitter" />
             </MKTypography>
-            <MKTypography
-              component={Link}
-              href="#pinterest"
-              target="_blank"
-              rel="noreferrer"
-              variant="body2"
-              color="dark"
-              opacity={0.5}
-              mr={3}
-            >
-              <i className="fab fa-pinterest" />
-            </MKTypography>
-            <MKTypography
-              component={Link}
-              href="#github"
-              target="_blank"
-              rel="noreferrer"
-              variant="body2"
-              color="dark"
-              opacity={0.5}
-            >
-              <i className="fab fa-github" />
+            <MKTypography component="a" href="#facebook" target="_blank" rel="noreferrer" variant="body2" color="dark" opacity={0.5} mr={3}>
+              <i className="fab fa-facebook" />
             </MKTypography>
           </Grid>
         </Grid>

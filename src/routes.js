@@ -51,6 +51,8 @@ import SignUpPage from "layouts/pages/authentication/sign-up";
 import ApplicationPage from "layouts/pages/landing-pages/application";
 import StepByStepGuidePage from "layouts/pages/landing-pages/step-by-step";
 import ViewPriceDetails from "pages/Presentation/routePage/ViewPriceDetails";
+import ApplicationViewByAdminPage from "layouts/pages/admin/admin-home";
+import UserAuthDetails from "layouts/pages/admin/user-details";
 // Sections
 import PageHeaders from "layouts/sections/page-sections/page-headers";
 import Features from "layouts/sections/page-sections/featuers";
@@ -71,6 +73,7 @@ import ProgressBars from "layouts/sections/elements/progress-bars";
 import Toggles from "layouts/sections/elements/toggles";
 import Typography from "layouts/sections/elements/typography";
 
+
 const routes = [
   {
     name: "pages",
@@ -81,6 +84,16 @@ const routes = [
       {
         name: "landing pages",
         collapse: [
+          {
+            name: "admin home",
+            route: "/userapplicationdetails",
+            component: <ApplicationViewByAdminPage />,
+          },
+          {
+            name: "all user",
+            route: "/userdetails",
+            component: <UserAuthDetails />,
+          },
           {
             name: "about us",
             route: "/about",

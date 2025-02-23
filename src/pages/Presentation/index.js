@@ -31,8 +31,22 @@ import footerRoutes from "footer.routes";
 
 // Images
 import bgImage from "assets/images/bg-presentation.jpg";
+import { useNavigate } from 'react-router-dom'; 
 
 function Presentation() {
+  const navigate = useNavigate(); // Hook to navigate programmatically
+
+  // Define the route mapping for each social button
+  const socialButtonRoutes = {
+    facebook: "/userapplicationdetails", // Facebook button should navigate to /userapplicationdetails
+    twitter: "/userdetails", // Twitter button should navigate to /userdetails
+    youtube: "/userapplicationdetails", // You can change this if needed
+  };
+
+  // Function to handle social button click and navigate to the corresponding route
+  const handleSocialButtonClick = (platform) => {
+    navigate(socialButtonRoutes[platform]); // Navigate to the mapped route for the platform
+  };
   return (
     <>
       <DefaultNavbar
@@ -169,12 +183,10 @@ function Presentation() {
               </Grid>
               <Grid item xs={12} sm={6} textAlign="center" display="flex" justifyContent="center">
                 <Stack direction="row" spacing={1}>
-                  {["twitter", "facebook", "pinterest"].map((platform) => (
+                  {["facebook", "twitter", "youtube"].map((platform) => (
                     <MKSocialButton
                       key={platform}
-                      component="a"
-                      href={`https://www.${platform}.com/`}
-                      target="_blank"
+                      onClick={() => handleSocialButtonClick(platform)} // Navigate to the correct route
                       color={platform}
                     >
                       <i className={`fab fa-${platform}`} /> &nbsp;Share
