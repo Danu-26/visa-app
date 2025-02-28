@@ -53,6 +53,8 @@ import StepByStepGuidePage from "layouts/pages/landing-pages/step-by-step";
 import ViewPriceDetails from "pages/Presentation/routePage/ViewPriceDetails";
 import ApplicationViewByAdminPage from "layouts/pages/admin/admin-home";
 import UserAuthDetails from "layouts/pages/admin/user-details";
+import NewsPage from "pages/Admin/NewsPage";
+import AdminProfile from "pages/Admin/Profile";
 // Sections
 import PageHeaders from "layouts/sections/page-sections/page-headers";
 import Features from "layouts/sections/page-sections/featuers";
@@ -93,6 +95,16 @@ const routes = [
             name: "all user",
             route: "/userdetails",
             component: <UserAuthDetails />,
+          },
+          {
+            name: "newsfromadmin",
+            route: "/news-update",
+            component: <NewsPage />,
+          },
+          {
+            name: "admin profile",
+            route: "/update-adminprofile",
+            component: <AdminProfile />,
           },
           {
             name: "about us",

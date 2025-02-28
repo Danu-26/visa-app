@@ -40,7 +40,7 @@ import footerRoutes from "footer.routes";
 import { Link } from 'react-router-dom';
 
 // Images
-import bgImage from "assets/images/bg-about-us.jpg";
+// import bgImage from "assets/images/bg-about-us.jpg";
 
 function AboutUs() {
   return (
@@ -57,20 +57,19 @@ function AboutUs() {
         light
       />
       <MKBox
-        minHeight="75vh"
-        width="100%"
-        sx={{
-          backgroundImage: ({ functions: { linearGradient, rgba }, palette: { gradients } }) =>
-            `${linearGradient(
-              rgba(gradients.dark.main, 0.6),
-              rgba(gradients.dark.state, 0.6)
-            )}, url(${bgImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          display: "grid",
-          placeItems: "center",
-        }}
-      >
+          minHeight="75vh"
+          width="100%"
+          sx={{
+            backgroundColor: "#155790",
+            backgroundSize: "cover",
+            backgroundPosition: "top",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+            px: { xs: 2, md: 6 },
+          }}
+        >
         <Container>
           <Grid
             container

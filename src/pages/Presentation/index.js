@@ -30,7 +30,7 @@ import routes from "routes";
 import footerRoutes from "footer.routes";
 
 // Images
-import bgImage from "assets/images/bg-presentation.jpg";
+// import bgImage from "assets/images/bg-presentation.jpg";
 import { useNavigate } from 'react-router-dom'; 
 
 function Presentation() {
@@ -61,7 +61,7 @@ function Presentation() {
       />
 
       {/* Hero Section */}
-      <MKBox
+      {/* <MKBox
         minHeight="75vh"
         width="100%"
         sx={{
@@ -74,7 +74,22 @@ function Presentation() {
           textAlign: "center",
           px: { xs: 2, md: 6 },
         }}
+      > */}
+      <MKBox
+        minHeight="75vh"
+        width="100%"
+        sx={{
+          backgroundColor: "#003A6B",
+          backgroundSize: "cover",
+          backgroundPosition: "top",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          px: { xs: 2, md: 6 },
+        }}
       >
+
         <Container>
           <Grid container justifyContent="center">
             <Grid item xs={12} md={8}>
@@ -103,7 +118,7 @@ function Presentation() {
                 size="large"
               >
                 Start your Application
-              </MKButton>;
+              </MKButton>
             </Grid>
           </Grid>
         </Container>

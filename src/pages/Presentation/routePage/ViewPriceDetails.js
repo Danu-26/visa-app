@@ -188,7 +188,7 @@ import MKButton from "components/MKButton";
 import { Link } from "react-router-dom";
 import { FormControl, Select, MenuItem } from "@mui/material";
 
-import bgImage from "assets/images/stepnew.jpeg";
+//import bgImage from "assets/images/stepnew.jpeg";
 
 // List of visa types and their corresponding prices
 const visaTypes = [
@@ -234,12 +234,15 @@ const ViewPriceDetails = () => {
           left: "0",
           width: "100%",
           height: "calc(100vh - 64px)",
-          backgroundImage: `url(${bgImage})`,
+          // backgroundColor: "#ADC4DD",
+          // backgroundColor: "#A4DFFD",
+          // backgroundColor: "#c3c6c8",
+          backgroundColor: "#e3f2fd",
           backgroundSize: "cover",
           backgroundPosition: "center bottom",
           backgroundAttachment: "fixed",
           backgroundBlendMode: "overlay",
-          backgroundColor: "rgba(0, 0, 0, 0.3)",
+       
         }}
       />
 

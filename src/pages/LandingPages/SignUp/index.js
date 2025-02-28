@@ -6,7 +6,7 @@ import MKTypography from "components/MKTypography";
 import MKInput from "components/MKInput";
 import MKButton from "components/MKButton";
 
-import bgImage from "assets/images/bg-sign-in-basic.jpeg";
+// import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 
 function SignUp() {
   return (
@@ -19,11 +19,14 @@ function SignUp() {
         width="100%"
         minHeight="100vh"
         sx={{
-          backgroundImage: ({ functions: { linearGradient, rgba }, palette: { gradients } }) =>
-            `${linearGradient(rgba(gradients.dark.main, 0.6), rgba(gradients.dark.state, 0.6))}, url(${bgImage})`,
+          backgroundColor: "#f2f2f2",
           backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
+          backgroundPosition: "top",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          px: { xs: 2, md: 6 },
         }}
       />
       <MKBox px={1} width="100%" height="100vh" position="relative">

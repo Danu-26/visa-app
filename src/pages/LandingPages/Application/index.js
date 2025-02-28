@@ -34,7 +34,7 @@ import routes from "routes";
 import footerRoutes from "footer.routes";
 
 // Images
-import bgImage from "assets/images/bg-about-us.jpg";
+// import bgImage from "assets/images/bg-about-us.jpg";
 import { Box, Container, Grid, Card, TextField, Select, MenuItem, FormControl, InputLabel, Button, Typography } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
@@ -113,8 +113,63 @@ function Application() {
   //     [name]: files ? files[0] : value, // Handle file input or regular input field
   //   }));
   // };
+  const [errors, setErrors] = useState({});
 
-  const handleNext = () => setStep((prev) => prev + 1);
+
+  // Validation function for each step
+  const validateStep = (currentStep) => {
+    const newErrors = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const mobileRegex = /^\+?[0-9]{10,15}$/;
+
+    switch (currentStep) {
+      case 1:
+        if (!formData.visaType) newErrors.visaType = "Visa type is required.";
+        break;
+      case 2:
+        if (!formData.firstName) newErrors.firstName = "First name is required.";
+        if (!formData.lastName) newErrors.lastName = "Last name is required.";
+        if (!formData.email) {
+          newErrors.email = "Email is required.";
+        } else if (!emailRegex.test(formData.email)) {
+          newErrors.email = "Invalid email format.";
+        }
+        if (!formData.mobileNumber) {
+          newErrors.mobileNumber = "Mobile number is required.";
+        } else if (!mobileRegex.test(formData.mobileNumber)) {
+          newErrors.mobileNumber = "Invalid mobile number format.";
+        }
+        if (!formData.passportNumber) newErrors.passportNumber = "Passport number is required.";
+        if (!formData.nationality) newErrors.nationality = "Nationality is required.";
+        if (!formData.address) newErrors.address = "Address is required.";
+        break;
+      case 3:
+        if (!formData.travelFrom) newErrors.travelFrom = "Travel origin is required.";
+        if (!formData.travelTo) newErrors.travelTo = "Travel destination is required.";
+        break;
+      case 4:
+        if (!formData.passportFile) newErrors.passportFile = "Passport file is required.";
+        if (!formData.photoFile) newErrors.photoFile = "Photo file is required.";
+        if (!formData.ticketFile) newErrors.ticketFile = "Ticket file is required.";
+        if (!formData.hotelBookingFile) newErrors.hotelBookingFile = "Hotel booking file is required.";
+        break;
+      default:
+        break;
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleNext = () => {
+    if (validateStep(step)) {
+      setStep(step + 1);
+    }
+  };
+
+
+
+  // const handleNext = () => setStep((prev) => prev + 1);
   const handlePrevious = () => setStep((prev) => prev - 1);
 
   const handleSubmit = async (e) => {
@@ -169,12 +224,13 @@ function Application() {
         ticketFile: null,
         hotelBookingFile: null,
       });
-      handleNext(); 
+
     } catch (error) {
       // Handle the error case
       console.error("Upload failed", error);
       alert("Upload failed. Please try again.");
     }
+          handleNext(); 
   };
 
 
@@ -195,6 +251,9 @@ function Application() {
     console.log('Payment submitted');
 
   }
+
+
+  
   return (
     <>
       <DefaultNavbar
@@ -212,15 +271,14 @@ function Application() {
         minHeight="75vh"
         width="100%"
         sx={{
-          backgroundImage: ({ functions: { linearGradient, rgba }, palette: { gradients } }) =>
-            `${linearGradient(
-              rgba(gradients.dark.main, 0.6),
-              rgba(gradients.dark.state, 0.6)
-            )}, url(${bgImage})`,
+          backgroundColor: "#155790",
           backgroundSize: "cover",
-          backgroundPosition: "center",
-          display: "grid",
-          placeItems: "center",
+          backgroundPosition: "top",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          px: { xs: 2, md: 6 },
         }}
       >
         <Container>
@@ -311,6 +369,9 @@ function Application() {
                           </MenuItem>
                         ))}
                       </Select>
+                      {errors.visaType && <Typography variant="body2" color="error" sx={{ fontSize: '0.875rem', marginTop: '4px' }}>
+                        {errors.visaType}
+                      </Typography>}
                     </FormControl>
 
 
@@ -357,6 +418,9 @@ function Application() {
                       required
                       margin="normal"
                     />
+                    {errors.firstName && <Typography variant="body2" color="error" sx={{ fontSize: '0.875rem', marginTop: '4px' }}>
+                      {errors.firstName}
+                    </Typography>}
                     <TextField
                       fullWidth
                       label="Last Name"
@@ -365,6 +429,9 @@ function Application() {
                       required
                       margin="normal"
                     />
+                    {errors.lastName && <Typography variant="body2" color="error" sx={{ fontSize: '0.875rem', marginTop: '4px' }}>
+                      {errors.lastName}
+                    </Typography>}
                     <TextField
                       fullWidth
                       label="Email"
@@ -374,6 +441,9 @@ function Application() {
                       required
                       margin="normal"
                     />
+                    {errors.email && <Typography variant="body2" color="error" sx={{ fontSize: '0.875rem', marginTop: '4px' }}>
+                      {errors.email}
+                    </Typography>}
                     <TextField
                       fullWidth
                       label="Mobile Number"
@@ -382,6 +452,9 @@ function Application() {
                       required
                       margin="normal"
                     />
+                    {errors.mobileNumber && <Typography variant="body2" color="error" sx={{ fontSize: '0.875rem', marginTop: '4px' }}>
+                      {errors.mobileNumber}
+                    </Typography>}
                     <TextField
                       fullWidth
                       label="Passport Number"
@@ -390,6 +463,9 @@ function Application() {
                       required
                       margin="normal"
                     />
+                    {errors.passportNumber && <Typography variant="body2" color="error" sx={{ fontSize: '0.875rem', marginTop: '4px' }}>
+                      {errors.passportNumber}
+                    </Typography>}
 
                     <FormControl fullWidth margin="normal" sx={{ minWidth: 120 }}>
                       <InputLabel shrink={formData.nationality !== ''} required>Nationality</InputLabel>
@@ -422,6 +498,9 @@ function Application() {
                           <MenuItem key={nation} value={nation}>{nation}</MenuItem>
                         ))}
                       </Select>
+                      {errors.nationality && <Typography variant="body2" color="error" sx={{ fontSize: '0.875rem', marginTop: '4px' }}>
+                        {errors.nationality}
+                      </Typography>}
                     </FormControl>
 
 
@@ -433,7 +512,9 @@ function Application() {
                       required
                       margin="normal"
                     />
-
+                    {errors.address && <Typography variant="body2" color="error" sx={{ fontSize: '0.875rem', marginTop: '4px' }}>
+                      {errors.address}
+                    </Typography>}
 
                     <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
                       <Button
@@ -493,6 +574,9 @@ function Application() {
                       margin="normal"
                       InputLabelProps={{ shrink: true }} // Ensures label is visible
                     />
+                    {errors.travelFrom && <Typography variant="body2" color="error" sx={{ fontSize: '0.875rem', marginTop: '4px' }}>
+                      {errors.travelFrom}
+                    </Typography>}
                     <TextField
                       fullWidth
                       label="Travel To"
@@ -503,6 +587,9 @@ function Application() {
                       margin="normal"
                       InputLabelProps={{ shrink: true }}
                     />
+                    {errors.travelTo && <Typography variant="body2" color="error" sx={{ fontSize: '0.875rem', marginTop: '4px' }}>
+                      {errors.travelTo}
+                    </Typography>}
                     <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
                       <Button
                         variant="outlined"
@@ -595,9 +682,18 @@ function Application() {
                           </Button>
 
                           {/* Display the uploaded file name below the button */}
-                          {formData[file.name] && (
+                          {/* {formData[file.name] && (
                             <Typography variant="body2" sx={{ mt: 1, textAlign: "center", color: "#1976d2" }}>
                               {formData[file.name].name}
+                            </Typography>
+                          )} */}
+
+                          {errors[file.name] && (
+                            <Typography
+                              variant="body2"
+                              sx={{ mt: 1, textAlign: "center", color: "red", fontSize: "0.875rem" }}
+                            >
+                              {errors[file.name]}
                             </Typography>
                           )}
                         </Grid>

@@ -31,7 +31,7 @@ import routes from "routes";
 import footerRoutes from "footer.routes";
 
 // Image
-import bgImage from "assets/images/illustrations/illustration-reset.jpg";
+import bgImage from "/Users/danulingam/Desktop/VisaApp/Visa-app/src/assets/images/bg-admin-dashboard.jpg";
 
 function ContactUs() {
   return (
@@ -56,8 +56,14 @@ function ContactUs() {
             borderRadius="lg"
             ml={2}
             mt={2}
-            sx={{ backgroundImage: `url(${bgImage})` }}
+            sx={{
+              backgroundImage: `url(${bgImage})`,
+              backgroundSize: "cover",  // Ensures the image covers the entire box
+              backgroundPosition: "center", // Centers the image
+              backgroundRepeat: "no-repeat", // Prevents the image from repeating
+            }}
           />
+
         </Grid>
         <Grid
           item

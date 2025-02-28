@@ -9,7 +9,7 @@ import DefaultNavbar from "examples/DefaultNavbar";
 import Footer from "pages/LandingPages/Track/sections/Footer";
 import routes from "routes";
 // import bgImage from "assets/images/city-profile.jpg";
-import bgImage from "assets/images/track2.jpg";
+// import bgImage from "assets/images/track2.jpg";
 function Track() {
   return (
     <>
@@ -31,7 +31,7 @@ function Track() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${bgImage})`,
+          backgroundColor: "#A4DFFD",
           backgroundSize: "cover",
           backgroundPosition: "center",
           p: 3,
@@ -71,11 +71,25 @@ function Track() {
           <Button
             fullWidth
             variant="contained"
-            color="primary"
-            sx={{ mt: 2, p: 1.5, fontSize: "16px", fontWeight: "bold" }}
+            sx={{
+              mt: 2,
+              p: 1.5,
+              fontSize: "16px",
+              fontWeight: "bold",
+              backgroundColor: '#003a6b', // Set button background color
+              color: 'white', // Set text color to white
+              '&:hover': {
+                backgroundColor: '#002c53', // Keep the same color on hover
+              }
+            }}
           >
             Track Application
           </Button>
+
+
+
+
+
         </Card>
       </Box>
 {/* 

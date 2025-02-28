@@ -18,16 +18,16 @@ import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import Switch from "@mui/material/Switch";
 import Grid from "@mui/material/Grid";
-import MuiLink from "@mui/material/Link";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import GoogleIcon from "@mui/icons-material/Google";
+// import MuiLink from "@mui/material/Link";
+// import FacebookIcon from "@mui/icons-material/Facebook";
+
+// import GoogleIcon from "@mui/icons-material/Google";
 import MKBox from "components/MKBox";
 import MKTypography from "components/MKTypography";
 import MKInput from "components/MKInput";
 import MKButton from "components/MKButton";
 
-import bgImage from "assets/images/bg-sign-in-basic.jpeg";
+// import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 
 function SignIn() {
   const [rememberMe, setRememberMe] = useState(false);
@@ -47,14 +47,14 @@ function SignIn() {
         width="100%"
         height="100%"
         sx={{
-          backgroundImage: ({ functions: { linearGradient, rgba }, palette: { gradients } }) =>
-            `${linearGradient(
-              rgba(gradients.dark.main, 0.6),
-              rgba(gradients.dark.state, 0.6)
-            )}, url(${bgImage})`,
+          backgroundColor: "#f2f2f2",
           backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
+          backgroundPosition: "top",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          px: { xs: 2, md: 6 },
         }}
       />
 
@@ -78,23 +78,19 @@ function SignIn() {
                 <MKTypography variant="h4" fontWeight="medium" color="white" mt={1}>
                   Sign in
                 </MKTypography>
-                <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
+                {/* <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
                   <Grid item xs={2}>
                     <MKTypography component={MuiLink} href="#" variant="body1" color="white">
                       <FacebookIcon color="inherit" />
                     </MKTypography>
                   </Grid>
-                  <Grid item xs={2}>
-                    <MKTypography component={MuiLink} href="#" variant="body1" color="white">
-                      <GitHubIcon color="inherit" />
-                    </MKTypography>
-                  </Grid>
+            
                   <Grid item xs={2}>
                     <MKTypography component={MuiLink} href="#" variant="body1" color="white">
                       <GoogleIcon color="inherit" />
                     </MKTypography>
                   </Grid>
-                </Grid>
+                </Grid> */}
               </MKBox>
 
               {/* Form */}
