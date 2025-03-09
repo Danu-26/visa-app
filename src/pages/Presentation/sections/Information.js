@@ -53,9 +53,21 @@ function Information() {
 
           {/* Visa Requirements List */}
           <Grid item xs={12} md={7}>
-            <MKTypography variant="h2" fontWeight="bold" textAlign="center" mb={3} sx={{ color: "#0d47a1" }}>
-              Essential Visa Requirements 
+            <MKTypography
+              variant="h3"
+              fontWeight="bold"
+              textAlign="center"
+              mb={3}
+              sx={{
+                color: "#533440", 
+                fontFamily: '"Playfair Display", serif', 
+                 textTransform: "uppercase",
+              }}
+              className="text-[#0f172a] font-serif"
+            >
+              Essential Visa Requirements
             </MKTypography>
+
 
             <Grid container spacing={3}>
               {/* Passport & Photos */}

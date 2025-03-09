@@ -129,7 +129,17 @@ function DesignBlocks() {
             container
             sx={{ mb: 2 }}
           />
-          <MKTypography variant="h2" fontWeight="bold" sx={{ color: "#0d47a1" }}>
+             <MKTypography
+                        variant="h2"
+                        fontWeight="bold"
+                        textAlign="center"
+                        mb={3}
+                        sx={{
+                          color: "#533440", 
+                          fontFamily: '"Playfair Display", serif', 
+                        }}
+                        className="text-[#0f172a] font-serif"
+                      >
             Latest News
           </MKTypography>
           <MKTypography variant="body1" color="textSecondary">

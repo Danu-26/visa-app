@@ -1,3 +1,4 @@
+
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -31,7 +32,7 @@ import footerRoutes from "footer.routes";
 
 // Images
 // import bgImage from "assets/images/bg-presentation.jpg";
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 
 function Presentation() {
   const navigate = useNavigate(); // Hook to navigate programmatically
