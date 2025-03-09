@@ -8,10 +8,10 @@ import DefaultInfoCard from "examples/Cards/InfoCards/DefaultInfoCard";
 import MKTypography from "components/MKTypography";
 
 // Import MUI Icons
-import PassportIcon from "@mui/icons-material/RememberMe"; 
-import PhotoCameraIcon from "@mui/icons-material/PhotoCamera"; 
-import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff"; 
-import HotelIcon from "@mui/icons-material/Hotel"; 
+import PassportIcon from "@mui/icons-material/RememberMe";
+import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
+import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
+import HotelIcon from "@mui/icons-material/Hotel";
 
 // Images
 import bgFront from "assets/images/rotating-card-bg-front.jpeg";
@@ -21,10 +21,10 @@ function Information() {
   return (
     <MKBox component="section" py={6} my={6} sx={{ bgcolor: "#f8f9fa" }}>
       <Container>
-        <Grid container item xs={12} spacing={4} alignItems="center" sx={{ mx: "auto" }}>
-          
+        <Grid container spacing={4} alignItems="center" justifyContent="center">
+
           {/* Rotating Card Section */}
-          <Grid item xs={12} md={5} sx={{ textAlign: "center" }}>
+          <Grid item xs={12} md={5} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             <RotatingCard>
               <RotatingCardFront
                 image={bgFront}
@@ -59,15 +59,14 @@ function Information() {
               textAlign="center"
               mb={3}
               sx={{
-                color: "#533440", 
-                fontFamily: '"Playfair Display", serif', 
-                 textTransform: "uppercase",
+                color: "#533440",
+                fontFamily: '"Playfair Display", serif',
+                textTransform: "uppercase",
               }}
               className="text-[#0f172a] font-serif"
             >
               Essential Visa Requirements
             </MKTypography>
-
 
             <Grid container spacing={3}>
               {/* Passport & Photos */}

@@ -10,6 +10,7 @@ import Footer from "pages/LandingPages/Track/sections/Footer";
 import routes from "routes";
 // import bgImage from "assets/images/city-profile.jpg";
 // import bgImage from "assets/images/track2.jpg";
+
 function Track() {
   return (
     <>
@@ -34,20 +35,26 @@ function Track() {
           backgroundColor: "#A4DFFD",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          p: 3,
+          p: { xs: 2, sm: 3 }, // Adjust padding for small screens
         }}
       >
         <Card
           sx={{
             width: "100%",
             maxWidth: 450,
-            p: 4,
+            p: { xs: 3, sm: 4 }, // Adjust padding for small screens
             boxShadow: 5,
             borderRadius: 3,
             backgroundColor: "rgba(255, 255, 255, 0.9)",
           }}
         >
-          <Typography variant="h5" fontWeight="bold" textAlign="center" mb={3}>
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+            textAlign="center"
+            mb={3}
+            sx={{ fontSize: { xs: "1.5rem", sm: "1.75rem" } }} // Adjust font size for small screens
+          >
             Track Your Application
           </Typography>
 
@@ -57,6 +64,7 @@ function Track() {
             placeholder="Enter your reference number"
             variant="outlined"
             margin="normal"
+            sx={{ fontSize: { xs: "14px", sm: "16px" } }} // Adjust input font size for mobile
           />
 
           <TextField
@@ -66,6 +74,7 @@ function Track() {
             variant="outlined"
             margin="normal"
             type="email"
+            sx={{ fontSize: { xs: "14px", sm: "16px" } }} // Adjust input font size for mobile
           />
 
           <Button
@@ -74,7 +83,7 @@ function Track() {
             sx={{
               mt: 2,
               p: 1.5,
-              fontSize: "16px",
+              fontSize: { xs: "14px", sm: "16px" }, // Adjust button font size for small screens
               fontWeight: "bold",
               backgroundColor: '#003a6b', // Set button background color
               color: 'white', // Set text color to white
@@ -85,14 +94,9 @@ function Track() {
           >
             Track Application
           </Button>
-
-
-
-
-
         </Card>
       </Box>
-{/* 
+      {/* 
       <Contact /> */}
       <Footer />
     </>

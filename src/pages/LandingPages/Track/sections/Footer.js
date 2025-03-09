@@ -24,7 +24,7 @@ function Footer() {
             mb={{ xs: 3, lg: 0 }}
           >
             <MKTypography variant="h6" textTransform="uppercase" mb={{ xs: 2, lg: 3 }}>
-              Material Design
+              UAE Visa Application Centre
             </MKTypography>
             <Stack
               component="ul"
@@ -49,11 +49,6 @@ function Footer() {
               <MKBox component="li">
                 <MKTypography variant="button" fontWeight="regular" opacity={0.8} component={Link} to="/contact">
                   Contact Us
-                </MKTypography>
-              </MKBox>
-              <MKBox component="li">
-                <MKTypography variant="button" fontWeight="regular" opacity={0.8} component={Link} to="/news">
-                  News
                 </MKTypography>
               </MKBox>
             </Stack>

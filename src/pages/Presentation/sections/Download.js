@@ -1,22 +1,5 @@
-/*
-=========================================================
-* Material Kit 2 React - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-kit-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// @mui material components
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-
 
 // Material Kit 2 React components
 import MKBox from "components/MKBox";
@@ -47,26 +30,48 @@ function Download() {
           zIndex={1}
           opacity={0.2}
         />
-        <Container sx={{ position: "relative", zIndex: 2, py: 12 }}>
-          <Grid container item xs={12} md={7} justifyContent="center" mx="auto" textAlign="center">
-            <MKTypography variant="h3" color="white">
-           Apply for your visa online with ease. 
+        <Container sx={{ position: "relative", zIndex: 2, py: { xs: 6, sm: 12 } }}>
+          <Grid
+            container
+            item
+            xs={12}
+            md={7}
+            justifyContent="center"
+            mx="auto"
+            textAlign="center"
+          >
+            <MKTypography
+              variant="h3"
+              color="white"
+              sx={{ fontSize: { xs: '1.8rem', sm: '2.5rem', md: '3rem' } }}
+            >
+              Apply for your visa online with ease.
             </MKTypography>
-            <MKTypography variant="h3" color="white" mb={1}>
-               Quick, Secure &amp; Reliable
+            <MKTypography
+              variant="h3"
+              color="white"
+              mb={1}
+              sx={{ fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' } }}
+            >
+              Quick, Secure &amp; Reliable
             </MKTypography>
-            <MKTypography variant="body2" color="white" mb={6}>
-            You can check the progress of your visa application at any time by visiting the Track Your Application page. Simply enter your reference ID and email address to see the current status 
+            <MKTypography
+              variant="body2"
+              color="white"
+              mb={6}
+              sx={{ fontSize: { xs: '0.85rem', sm: '1rem', md: '1.125rem' } }}
+            >
+              You can check the progress of your visa application at any time by visiting the Track Your Application page. Simply enter your reference ID and email address to see the current status.
             </MKTypography>
             <MKButton
               variant="gradient"
               color="info"
               size="large"
-             component={Link}
+              component={Link}
               to="/startyourapplication"
               sx={{ mb: 2 }}
             >
-            START YOUR APPLICATION
+              START YOUR APPLICATION
             </MKButton>
           </Grid>
         </Container>

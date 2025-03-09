@@ -54,7 +54,7 @@ function ApplicationProcessGuide() {
           alignItems: "center",
           justifyContent: "center",
           textAlign: "center",
-          px: { xs: 2, md: 6 },
+          px: { xs: 2, md: 6 }, // Adjust padding for small screens
         }}
       >
         <Container>
@@ -72,7 +72,7 @@ function ApplicationProcessGuide() {
               variant="h3"
               color="white"
               sx={{
-                fontSize: { xs: "2rem", md: "3rem" },
+                fontSize: { xs: "2rem", md: "3rem" }, // Adjust font size for different screen sizes
                 textAlign: "center",
               }}
             >
@@ -94,18 +94,18 @@ function ApplicationProcessGuide() {
           <Grid container spacing={2} alignItems="flex-start" key={index} sx={{ mb: 3, justifyContent: "center" }}>
             {/* Left Side: Arrow Icon aligned with Heading */}
             <Grid item xs={2} md={1} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-              <ArrowForwardIcon sx={{ fontSize: "2.5rem", color: "#1976D2" }} />
+              <ArrowForwardIcon sx={{ fontSize: { xs: "1.8rem", sm: "2.5rem" }, color: "#1976D2" }} />
             </Grid>
 
             {/* Right Side: Step Details */}
             <Grid item xs={10} md={8} sx={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-              <Typography variant="h5" fontWeight="bold" sx={{ mb: 1 }}>
+              <Typography variant="h5" fontWeight="bold" sx={{ mb: 1, fontSize: { xs: "1.25rem", sm: "1.5rem" } }}>
                 {step.title}
               </Typography>
               <List sx={{ p: 0 }}>
                 {step.details.map((detail, i) => (
                   <ListItem key={i} sx={{ pl: 0 }}>
-                    <ListItemIcon sx={{ color: "#1976D2" }}>
+                    <ListItemIcon sx={{ color: "#1976D2", fontSize: { xs: "1rem", sm: "1.25rem" } }}>
                       <CheckCircleIcon />
                     </ListItemIcon>
                     <ListItemText primary={detail} primaryTypographyProps={{ fontSize: "1rem", color: "#333" }} />

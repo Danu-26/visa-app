@@ -1,17 +1,3 @@
-/*
-=========================================================
-* Material Kit 2 React - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-kit-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
 import '@fortawesome/fontawesome-free/css/all.min.css';
 // @mui material components
 import Container from "@mui/material/Container";
@@ -30,8 +16,6 @@ import DefaultFooter from "examples/Footers/DefaultFooter";
 // About Us page sections
 import Information from "pages/LandingPages/AboutUs/sections/Information";
 import Team from "pages/LandingPages/AboutUs/sections/Team";
-// import Featuring from "pages/LandingPages/AboutUs/sections/Featuring";
-// import Newsletter from "pages/LandingPages/AboutUs/sections/Newsletter";
 
 // Routes
 import routes from "routes";
@@ -57,19 +41,19 @@ function AboutUs() {
         light
       />
       <MKBox
-          minHeight="75vh"
-          width="100%"
-          sx={{
-            backgroundColor: "#155790",
-            backgroundSize: "cover",
-            backgroundPosition: "top",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            textAlign: "center",
-            px: { xs: 2, md: 6 },
-          }}
-        >
+        minHeight="75vh"
+        width="100%"
+        sx={{
+          backgroundColor: "#155790",
+          backgroundSize: "cover",
+          backgroundPosition: "top",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          px: { xs: 2, md: 6 }, // Adjust padding for smaller screens
+        }}
+      >
         <Container>
           <Grid
             container
@@ -86,23 +70,34 @@ function AboutUs() {
               color="white"
               sx={({ breakpoints, typography: { size } }) => ({
                 [breakpoints.down("md")]: {
-                  fontSize: size["3xl"],
+                  fontSize: size["3xl"], // Adjust font size on medium screens and below
                 },
               })}
             >
-             Helping You Travel with Confidence
+              Helping You Travel with Confidence
             </MKTypography>
             <MKTypography variant="body1" color="white" opacity={0.8} mt={1} mb={3}>
-            Your Trusted Partner in Visa Applications
+              Your Trusted Partner in Visa Applications
             </MKTypography>
             <Link to="/signin" style={{ textDecoration: 'none' }}>
-      <MKButton color="default" sx={{ color: ({ palette: { dark } }) => dark.main }}>
-        Create Account
-      </MKButton>
-            </Link><MKTypography variant="h6" color="white" mt={8} mb={1} sx={{ textAlign: 'center' }}>
+              <MKButton color="default" sx={{ color: ({ palette: { dark } }) => dark.main }}>
+                Create Account
+              </MKButton>
+            </Link>
+            <MKTypography variant="h6" color="white" mt={8} mb={1} sx={{ textAlign: 'center' }}>
               Find us on
             </MKTypography>
-            <MKBox display="flex" justifyContent="center" alignItems="center" sx={{ mt: 2, justifyContent: 'center' }}>
+            <MKBox
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              sx={{
+                mt: 2,
+                justifyContent: 'center',
+                gap: 2, // Add space between icons
+                flexWrap: 'wrap', // Allow icons to wrap to the next line on smaller screens
+              }}
+            >
               <MKTypography component="a" variant="body1" color="white" href="#" mr={3}>
                 <i className="fab fa-facebook" />
               </MKTypography>
@@ -116,8 +111,6 @@ function AboutUs() {
                 <i className="fab fa-youtube" />
               </MKTypography>
             </MKBox>
-
-
           </Grid>
         </Container>
       </MKBox>

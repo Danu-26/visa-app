@@ -1,4 +1,3 @@
-
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -48,6 +47,7 @@ function Presentation() {
   const handleSocialButtonClick = (platform) => {
     navigate(socialButtonRoutes[platform]); // Navigate to the mapped route for the platform
   };
+
   return (
     <>
       <DefaultNavbar
@@ -62,20 +62,6 @@ function Presentation() {
       />
 
       {/* Hero Section */}
-      {/* <MKBox
-        minHeight="75vh"
-        width="100%"
-        sx={{
-          backgroundImage: `url(${bgImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "top",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          textAlign: "center",
-          px: { xs: 2, md: 6 },
-        }}
-      > */}
       <MKBox
         minHeight="75vh"
         width="100%"
@@ -87,13 +73,12 @@ function Presentation() {
           alignItems: "center",
           justifyContent: "center",
           textAlign: "center",
-          px: { xs: 2, md: 6 },
+          px: { xs: 2, sm: 4, md: 6 }, // Responsively change padding
         }}
       >
-
         <Container>
           <Grid container justifyContent="center">
-            <Grid item xs={12} md={8}>
+            <Grid item xs={12} sm={10} md={8}>
               <MKTypography
                 variant="h1"
                 color="white"
@@ -107,7 +92,11 @@ function Presentation() {
               <MKTypography
                 variant="body1"
                 color="white"
-                sx={{ fontSize: { xs: "0.9rem", md: "1.2rem" }, mt: 2, mb: 4 }}
+                sx={{
+                  fontSize: { xs: "0.9rem", sm: "1rem", md: "1.2rem" }, // Adjust font size for responsiveness
+                  mt: 2,
+                  mb: 4,
+                }}
               >
                 For Sri Lankan Passport Holders
               </MKTypography>
@@ -117,6 +106,7 @@ function Presentation() {
                 variant="gradient"
                 color="primary"
                 size="large"
+                sx={{ width: { xs: "100%", sm: "auto" } }} // Button takes full width on smaller screens
               >
                 Start your Application
               </MKButton>
@@ -128,8 +118,8 @@ function Presentation() {
       {/* Main Content Section */}
       <Card
         sx={{
-          p: { xs: 2, md: 4 },
-          mx: { xs: 2, lg: 3 },
+          p: { xs: 2, sm: 3, md: 4 },
+          mx: { xs: 2, sm: 3, lg: 4 },
           mt: -8,
           mb: 4,
           backgroundColor: ({ palette, functions }) => functions.rgba(palette.white.main, 0.8),
@@ -198,12 +188,13 @@ function Presentation() {
                 </MKTypography>
               </Grid>
               <Grid item xs={12} sm={6} textAlign="center" display="flex" justifyContent="center">
-                <Stack direction="row" spacing={1}>
+                <Stack direction="row" spacing={1} justifyContent="center" wrap="wrap">
                   {["facebook", "twitter", "youtube"].map((platform) => (
                     <MKSocialButton
                       key={platform}
                       onClick={() => handleSocialButtonClick(platform)} // Navigate to the correct route
                       color={platform}
+                      sx={{ width: { xs: "100%", sm: "auto" } }} // Adjust button size for mobile responsiveness
                     >
                       <i className={`fab fa-${platform}`} /> &nbsp;Share
                     </MKSocialButton>

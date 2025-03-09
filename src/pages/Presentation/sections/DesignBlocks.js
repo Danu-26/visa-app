@@ -1,4 +1,3 @@
-// react-router-dom components
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -129,17 +128,17 @@ function DesignBlocks() {
             container
             sx={{ mb: 2 }}
           />
-             <MKTypography
-                        variant="h2"
-                        fontWeight="bold"
-                        textAlign="center"
-                        mb={3}
-                        sx={{
-                          color: "#533440", 
-                          fontFamily: '"Playfair Display", serif', 
-                        }}
-                        className="text-[#0f172a] font-serif"
-                      >
+          <MKTypography
+            variant="h2"
+            fontWeight="bold"
+            textAlign="center"
+            mb={3}
+            sx={{
+              color: "#533440",
+              fontFamily: '"Playfair Display", serif',
+            }}
+            className="text-[#0f172a] font-serif"
+          >
             Latest News
           </MKTypography>
           <MKTypography variant="body1" color="textSecondary">
@@ -147,6 +146,7 @@ function DesignBlocks() {
           </MKTypography>
         </Grid>
       </Container>
+
       <Container sx={{ mt: 6 }}>{renderData}</Container>
 
       {/* Modal for Full News Content */}

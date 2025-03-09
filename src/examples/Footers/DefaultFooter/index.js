@@ -12,6 +12,7 @@ function DefaultFooter({ content = {} }) {
     <MKBox component="footer" sx={{ bgcolor: "#f8f9fa", py: 5, mt: 5 }}>
       <Container>
         <Grid container spacing={3} justifyContent="center">
+          {/* Brand Section */}
           {brand.route && brand.image && (
             <Grid item xs={12} md={3} sx={{ textAlign: "center", mb: 3 }}>
               <Link to={brand.route}>
@@ -19,24 +20,42 @@ function DefaultFooter({ content = {} }) {
                   component="img"
                   src={brand.image}
                   alt={brand.name || "Brand"}
-                  sx={{ width: 150, height: "auto", mb: 2 }}
+                  sx={{
+                    width: 150,
+                    height: "auto",
+                    mb: 2,
+                    "@media (max-width:600px)": {
+                      width: 120, // Smaller logo on mobile
+                    },
+                  }}
                 />
               </Link>
-              <MKTypography variant="h6" fontWeight="bold">
+              <MKTypography
+                variant="h6"
+                fontWeight="bold"
+                sx={{ fontSize: { xs: "1.1rem", sm: "1.2rem" } }}
+              >
                 {brand.name || "Brand Name"}
               </MKTypography>
             </Grid>
           )}
 
+          {/* Menu Sections */}
           {menus.map(({ name: title, items = [] }) => (
             <Grid key={title} item xs={6} md={2} sx={{ textAlign: "center", mb: 3 }}>
-              <MKTypography variant="button" fontWeight="bold" textTransform="capitalize" mb={1}>
+              <MKTypography
+                variant="button"
+                fontWeight="bold"
+                textTransform="capitalize"
+                mb={1}
+                sx={{ fontSize: { xs: "0.9rem", sm: "1rem" } }}
+              >
                 {title}
               </MKTypography>
               <MKBox component="ul" p={0} m={0} sx={{ listStyle: "none", paddingLeft: 0 }}>
                 {items.map(({ name, route, href }) => (
                   <MKBox key={name} component="li" sx={{ mb: 1 }}>
-                    {route ? ( // Internal SPA navigation
+                    {route ? (
                       <MKTypography
                         component={Link}
                         to={route}
@@ -44,10 +63,16 @@ function DefaultFooter({ content = {} }) {
                         fontWeight="regular"
                         textTransform="capitalize"
                         color="text.secondary"
+                        sx={{
+                          fontSize: { xs: "0.8rem", sm: "1rem" },
+                          "&:hover": {
+                            color: "primary.main",
+                          },
+                        }}
                       >
                         {name}
                       </MKTypography>
-                    ) : ( // External links open in a new tab
+                    ) : (
                       <MKTypography
                         component="a"
                         href={href}
@@ -57,6 +82,12 @@ function DefaultFooter({ content = {} }) {
                         fontWeight="regular"
                         textTransform="capitalize"
                         color="text.secondary"
+                        sx={{
+                          fontSize: { xs: "0.8rem", sm: "1rem" },
+                          "&:hover": {
+                            color: "primary.main",
+                          },
+                        }}
                       >
                         {name}
                       </MKTypography>
@@ -67,6 +98,7 @@ function DefaultFooter({ content = {} }) {
             </Grid>
           ))}
 
+          {/* Social Media Section */}
           <Grid item xs={12} sx={{ textAlign: "center", my: 3 }}>
             <MKBox display="flex" justifyContent="center" gap={2}>
               {socials.map(({ icon, link }, key) => (
@@ -81,6 +113,7 @@ function DefaultFooter({ content = {} }) {
                   sx={{
                     transition: "all 0.3s",
                     "&:hover": { color: "primary.main", transform: "scale(1.2)" },
+                    fontSize: { xs: "1.5rem", sm: "2rem" }, // Responsive icon size
                   }}
                 >
                   {icon}
@@ -89,9 +122,12 @@ function DefaultFooter({ content = {} }) {
             </MKBox>
           </Grid>
 
+          {/* Copyright Section */}
           {copyright && (
             <Grid item xs={12} sx={{ textAlign: "center", mt: 2 }}>
-              {copyright}
+              <MKTypography variant="body2" color="text.secondary">
+                {copyright}
+              </MKTypography>
             </Grid>
           )}
         </Grid>

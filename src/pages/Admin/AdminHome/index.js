@@ -1,11 +1,9 @@
 import '@fortawesome/fontawesome-free/css/all.min.css';
 // @mui material components
 import Container from "@mui/material/Container";
-// import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import MKBox from "components/MKBox";
 import MKTypography from "components/MKTypography";
-
 
 import DefaultFooter from "examples/Footers/DefaultFooter";
 
@@ -16,13 +14,10 @@ import UserStatus from "pages/Admin/AdminHome/UserApplicationCard/UserStatus.js"
 import AdminNavBar from "pages/Admin/AdminNavBar";
 import footerRoutes from "footer.routes";
 
-// Images
-// import bgImage from "assets/images/bg-admin-dashboard.jpg";
-
 function AdminHomeView() {
     return (
         <>
-            <AdminNavBar /> 
+            <AdminNavBar />
             <MKBox
                 minHeight="100vh"
                 width="100%"
@@ -35,6 +30,7 @@ function AdminHomeView() {
                     justifyContent: "center",
                     textAlign: "center",
                     px: { xs: 2, md: 6 },
+                    pt: { xs: 8, md: 6 }, // Adds padding to the top on mobile
                 }}
             >
                 <Container>
@@ -42,7 +38,7 @@ function AdminHomeView() {
                         sx={{
                             p: 2,
                             mx: { xs: 2, lg: 3 },
-                            mt: -8,
+                            mt: { xs: 2, lg: -8 }, // Adjusts the margin-top for mobile
                             mb: 4,
                             boxShadow: ({ boxShadows: { xxl } }) => xxl,
                         }}
@@ -64,8 +60,6 @@ function AdminHomeView() {
                     </Card>
                 </Container>
             </MKBox>
-
-        
 
             <MKBox pt={6} px={1} mt={6}>
                 <DefaultFooter content={footerRoutes} />
