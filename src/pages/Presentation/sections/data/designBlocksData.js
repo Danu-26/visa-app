@@ -35,25 +35,25 @@ export default [
       },
     ],
   },
-  {
-    title: "General Immigration News",
-    description: "Stay informed about the latest immigration policies and changes.",
-    items: [
-      {
-        name: "Student Visa Extensions",
-        content: "The government has announced easier extensions for student visas.",
-        date: "2025-02-12",
-      },
-      {
-        name: "Work Visa Quota",
-        content: "Work visa quotas have been increased for tech professionals.",
-        date: "2025-02-10",
-      },
-      {
-        name: "Residency Application Updates",
-        content: "Residency applications will now be processed faster under new rules.",
-        date: "2025-02-08",
-      },
-    ],
-  },
+  // {
+  //   title: "General Immigration News",
+  //   description: "Stay informed about the latest immigration policies and changes.",
+  //   items: [
+  //     {
+  //       name: "Student Visa Extensions",
+  //       content: "The government has announced easier extensions for student visas.",
+  //       date: "2025-02-12",
+  //     },
+  //     {
+  //       name: "Work Visa Quota",
+  //       content: "Work visa quotas have been increased for tech professionals.",
+  //       date: "2025-02-10",
+  //     },
+  //     {
+  //       name: "Residency Application Updates",
+  //       content: "Residency applications will now be processed faster under new rules.",
+  //       date: "2025-02-08",
+  //     },
+  //   ],
+  // },
 ];

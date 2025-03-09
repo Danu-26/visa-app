@@ -31,7 +31,7 @@ import routes from "routes";
 import footerRoutes from "footer.routes";
 
 // Image
-import bgImage from "/Users/danulingam/Desktop/VisaApp/Visa-app/src/assets/images/bg-admin-dashboard.jpg";
+import bgImage from "/Users/danulingam/Desktop/VisaApp/frontend/src/assets/images/contact1.png";
 
 function ContactUs() {
   return (

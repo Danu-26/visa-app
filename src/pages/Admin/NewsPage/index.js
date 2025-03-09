@@ -33,7 +33,7 @@ function NewsPage() {
                 minHeight="60vh"
                 width="100%"
                 sx={{
-                    backgroundColor: "#d5a6bd",
+                    backgroundColor: "#fff0f3",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",

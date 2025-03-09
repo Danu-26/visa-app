@@ -27,7 +27,7 @@ function AdminHomeView() {
                 minHeight="100vh"
                 width="100%"
                 sx={{
-                    backgroundColor: "#d5a6bd",
+                    backgroundColor: "#ffe9ec",
                     backgroundSize: "cover",
                     backgroundPosition: "top",
                     display: "flex",

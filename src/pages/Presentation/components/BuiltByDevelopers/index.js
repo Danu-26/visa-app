@@ -2,7 +2,7 @@
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Icon from "@mui/material/Icon";
-
+import { Link } from "react-router-dom";
 // Material Kit 2 React components
 import MKBox from "components/MKBox";
 import MKTypography from "components/MKTypography";
@@ -40,10 +40,8 @@ function BuiltByDevelopers() {
             From visa types and document requirements to payment and tracking, our platform provides complete guidance. Follow the step-by-step process and get your visa approved with ease.
           </MKTypography>
           <MKTypography
-            component="a"
-            href="https://www.creative-tim.com/learning-lab/react/overview/material-kit/"
-            target="_blank"
-            rel="noreferrer"
+            component={Link}
+            to="/stepbystep"
             variant="body2"
             color="white"
             fontWeight="regular"
@@ -64,6 +62,7 @@ function BuiltByDevelopers() {
           >
             Guide <Icon sx={{ fontWeight: "bold" }}>arrow_forward</Icon>
           </MKTypography>
+
         </Grid>
       </Container>
     </MKBox>

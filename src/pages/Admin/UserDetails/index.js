@@ -34,7 +34,7 @@ function UserTable() {
                 minHeight="100vh"
                 width="100%"
                 sx={{
-                    backgroundColor: "#d5a6bd",
+                    backgroundColor: "#fff0f3",
                     backgroundSize: "cover",
                     backgroundPosition: "top",
                     display: "flex",
