@@ -1,72 +1,35 @@
-/*
-=========================================================
-* Material Kit 2 React - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-kit-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
 import React, { useState } from "react";
-// @mui material components
-import CenteredBlogCard from "examples/Cards/BlogCards/CenteredBlogCard";
-// Material Kit 2 React components
-import MKBox from "components/MKBox";
-import MKTypography from "components/MKTypography";
-
-import axios from "axios";
-
-// Material Kit 2 React examples
-import DefaultNavbar from "examples/DefaultNavbar";
-import DefaultFooter from "examples/Footers/DefaultFooter";
-
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-
-
-// Routes
+import { Box, Container, Card, Grid, TextField, Select, MenuItem, FormControl, InputLabel, Button, Typography } from "@mui/material";
 import routes from "routes";
 import footerRoutes from "footer.routes";
-
-// Images
-// import bgImage from "assets/images/bg-about-us.jpg";
-import { Box, Container, Grid, Card, TextField, Select, MenuItem, FormControl, InputLabel, Button, Typography } from "@mui/material";
+import MKBox from "components/MKBox";
+import MKTypography from "components/MKTypography";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { styled } from "@mui/material/styles";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import axios from "axios";
 
 
+import DefaultNavbar from "examples/DefaultNavbar";
+import DefaultFooter from "examples/Footers/DefaultFooter";
+import CenteredBlogCard from "examples/Cards/BlogCards/CenteredBlogCard";
+import PaymentForm from "./PaymentForm";
+const stripePromise = loadStripe("pk_test_51L7Te4IqrghmmhfiRwNRTW0XAM5PBnGSDEcETGL5jiPCSTJStSgfR892cw2UnRkHGef4eBJH2QlgwVt0iHplSHFn00Tq4D2jxR");
 
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
+const visaTypes = [
+  "14-Day Tourist Visa (Adult, Single Entry)",
+  "30-Day Tourist Visa (Adult, Single Entry)",
+  "60-Day Tourist Visa (Adult, Multiple Entry)"
+];
 
-
+const nationalities = ["Sri Lanka", "India", "Pakistan", "Bangladesh"];
 
 function Application() {
-  const visaTypes = [
-    "14-Day Tourist Visa (Adult, Single Entry)",
-    "14-Day Tourist Visa (Child Under 12, Single Entry)",
-    "30-Day Tourist Visa (Adult, Single Entry)",
-    "30-Day Tourist Visa (Child Under 12, Single Entry)",
-    "30-Day Tourist Visa (Child Under 12, Multiple Entry)",
-    "60-Day Tourist Visa (Adult, Multiple Entry)",
-    "60-Day Tourist Visa (Child Under 12, Multiple Entry)",];
-  const nationalities = ["Sri Lanka", "India", "Pakistan", "Bangladesh"];
-
   const [step, setStep] = useState(1);
+  const [errors, setErrors] = useState({});
+  const [uploadSuccess, setUploadSuccess] = useState(false);
   const [formData, setFormData] = useState({
     visaType: "",
     firstName: "",
@@ -84,77 +47,56 @@ function Application() {
     hotelBookingFile: null,
   });
 
-  const handleChangeforText = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => {
+      const newErrors = { ...prev };
+      delete newErrors[name];  // Remove the error for the field being edited
+      return newErrors;
+    });
   };
 
-  // const handleFileChange = (e) => {
-  //   const { name, files } = e.target;
-  //   setFormData((prevData) => ({ ...prevData, [name]: files[0] }));
-  // };
-
-  const handleFileChange = (event, fieldName) => {
-    const file = event.target.files[0]; // Get the selected file
+  const handleFileChange = (e, fieldName) => {
+    const file = e.target.files[0];
     if (file) {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        [fieldName]: file, // Update state with the selected file
-      }));
+      setFormData((prev) => ({ ...prev, [fieldName]: file }));
+      // Clear the corresponding error once the file is selected
+      setErrors((prev) => ({ ...prev, [fieldName]: "" }));
     }
   };
 
-  // const handleChange = (e) => {
-  //   const { name, files, value } = e.target;
 
-  //   // Update the formData state
-  //   setFormData((prevState) => ({
-  //     ...prevState,
-  //     [name]: files ? files[0] : value, // Handle file input or regular input field
-  //   }));
-  // };
-  const [errors, setErrors] = useState({});
+  const validateStep = () => {
+    let newErrors = {};
 
-
-  // Validation function for each step
-  const validateStep = (currentStep) => {
-    const newErrors = {};
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const mobileRegex = /^\+?[0-9]{10,15}$/;
-
-    switch (currentStep) {
-      case 1:
-        if (!formData.visaType) newErrors.visaType = "Visa type is required.";
-        break;
-      case 2:
-        if (!formData.firstName) newErrors.firstName = "First name is required.";
-        if (!formData.lastName) newErrors.lastName = "Last name is required.";
-        if (!formData.email) {
-          newErrors.email = "Email is required.";
-        } else if (!emailRegex.test(formData.email)) {
-          newErrors.email = "Invalid email format.";
-        }
-        if (!formData.mobileNumber) {
-          newErrors.mobileNumber = "Mobile number is required.";
-        } else if (!mobileRegex.test(formData.mobileNumber)) {
-          newErrors.mobileNumber = "Invalid mobile number format.";
-        }
-        if (!formData.passportNumber) newErrors.passportNumber = "Passport number is required.";
-        if (!formData.nationality) newErrors.nationality = "Nationality is required.";
-        if (!formData.address) newErrors.address = "Address is required.";
-        break;
-      case 3:
-        if (!formData.travelFrom) newErrors.travelFrom = "Travel origin is required.";
-        if (!formData.travelTo) newErrors.travelTo = "Travel destination is required.";
-        break;
-      case 4:
-        if (!formData.passportFile) newErrors.passportFile = "Passport file is required.";
-        if (!formData.photoFile) newErrors.photoFile = "Photo file is required.";
-        if (!formData.ticketFile) newErrors.ticketFile = "Ticket file is required.";
-        if (!formData.hotelBookingFile) newErrors.hotelBookingFile = "Hotel booking file is required.";
-        break;
-      default:
-        break;
+    if (step === 1 && !formData.visaType) newErrors.visaType = "Visa Type is required";
+    if (step === 2) {
+      if (!formData.firstName) newErrors.firstName = "First Name is required";
+      if (!formData.lastName) newErrors.lastName = "Last Name is required";
+      if (!formData.email) {
+        newErrors.email = "Email is required";
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        newErrors.email = "Invalid email format";
+      }
+      if (!formData.mobileNumber) {
+        newErrors.mobileNumber = "Mobile Number is required";
+      } else if (!/^\d+$/.test(formData.mobileNumber)) {
+        newErrors.mobileNumber = "Mobile Number should contain only digits";
+      }
+      if (!formData.passportNumber) newErrors.passportNumber = "Passport Number is required";
+      if (!formData.nationality) newErrors.nationality = "Nationality is required";
+      if (!formData.address) newErrors.address = "Address is required";
+    }
+    if (step === 3) {
+      if (!formData.travelFrom) newErrors.travelFrom = "Travel From date is required";
+      if (!formData.travelTo) newErrors.travelTo = "Travel To date is required";
+    }
+    if (step === 4) {
+      if (!formData.passportFile) newErrors.passportFile = "Passport file is required";
+      if (!formData.photoFile) newErrors.photoFile = "Photo file is required";
+      if (!formData.ticketFile) newErrors.ticketFile = "Ticket file is required";
+      if (!formData.hotelBookingFile) newErrors.hotelBookingFile = "Hotel booking file is required";
     }
 
     setErrors(newErrors);
@@ -162,100 +104,45 @@ function Application() {
   };
 
   const handleNext = () => {
-    if (validateStep(step)) {
-      setStep(step + 1);
-    }
+    if (validateStep()) setStep(step + 1);
   };
 
-
-
-  // const handleNext = () => setStep((prev) => prev + 1);
-  const handlePrevious = () => setStep((prev) => prev - 1);
+  const handlePrevious = () => setStep(step - 1);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Create FormData object
-    const data = new FormData();
+    // Ensure all files are selected before submitting
+    if (!formData.passportFile || !formData.photoFile || !formData.ticketFile || !formData.hotelBookingFile) {
+      setErrors((prev) => ({
+        ...prev,
+        passportFile: !formData.passportFile ? "Passport file is required" : "",
+        photoFile: !formData.photoFile ? "Photo file is required" : "",
+        ticketFile: !formData.ticketFile ? "Ticket file is required" : "",
+        hotelBookingFile: !formData.hotelBookingFile ? "Hotel booking file is required" : "",
+      }));
+      return;
+    }
 
-    // Append file fields to FormData
+    const data = new FormData();
     Object.keys(formData).forEach((key) => {
-      if (formData[key] && key.includes("File")) { // Check for file keys
-        data.append(key, formData[key]);
-      }
+      if (formData[key]) data.append(key, formData[key]);
     });
 
-    // Append other form fields
-    const { visaType, firstName, lastName, email, mobileNumber, passportNumber, nationality, address, travelFrom, travelTo } = formData;
-    data.append("visaType", visaType);
-    data.append("firstName", firstName);
-    data.append("lastName", lastName);
-    data.append("email", email);
-    data.append("mobileNumber", mobileNumber);
-    data.append("passportNumber", passportNumber);
-    data.append("nationality", nationality);
-    data.append("address", address);
-    data.append("travelFrom", travelFrom);
-    data.append("travelTo", travelTo);
-
     try {
-      // Make the POST request with the FormData
-      await axios.post("http://localhost:5001/api/visa/upload", data, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      // Handle the success case
-      alert("Files uploaded successfully!");
-
-      // Reset formData after successful upload
-      setFormData({
-        visaType: "",
-        firstName: "",
-        lastName: "",
-        email: "",
-        mobileNumber: "",
-        passportNumber: "",
-        nationality: "",
-        address: "",
-        travelFrom: "",
-        travelTo: "",
-        passportFile: null,
-        photoFile: null,
-        ticketFile: null,
-        hotelBookingFile: null,
-      });
-
+      await axios.post("http://localhost:5001/api/visa/upload", data, { headers: { "Content-Type": "multipart/form-data" } });
+      setUploadSuccess(true);
+      setTimeout(() => {
+        setStep(5); // Move to Payment Step
+      }, 2000);
     } catch (error) {
-      // Handle the error case
       console.error("Upload failed", error);
-      alert("Upload failed. Please try again.");
     }
-          handleNext(); 
   };
 
-
-
-  const [paymentMethod, setPaymentMethod] = useState('credit-card');
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiryDate, setExpiryDate] = useState('');
-  const [cvv, setCvv] = useState('');
-
-  // Handlers for form input changes
-  const handlePaymentMethodChange = (event) => setPaymentMethod(event.target.value);
-  const handleCardNumberChange = (event) => setCardNumber(event.target.value);
-  const handleExpiryDateChange = (event) => setExpiryDate(event.target.value);
-  const handleCvvChange = (event) => setCvv(event.target.value);
-
-  // Handler for the payment submission
-  const handlePaymentSubmit = () => {
-    console.log('Payment submitted');
-
-  }
-
-
-  
   return (
     <>
+
       <DefaultNavbar
         routes={routes}
         action={{
@@ -335,526 +222,263 @@ function Application() {
               }}
             />
           </Grid>
-          {/* Right Side: Visa Application Form */}
           <Grid item xs={12} lg={6}>
             <Card sx={{ p: 4 }}>
-              <Typography variant="h4" mb={3} textAlign="center">
-                UAE Visa Application
-              </Typography>
-              <form onSubmit={handleSubmit}>
-                {step === 1 && (
-                  <>
+              <Container>
+                <Card sx={{ p: 4 }}>
+                  <Typography variant="h4" mb={3} textAlign="center">
+                    UAE Visa Application
+                  </Typography>
+
+                  {step === 1 && (
                     <FormControl fullWidth>
+                      <InputLabel>Visa Type</InputLabel>
                       <Select
-                        value={formData.visaType || ''} // Make sure this is bound to your state
-                        onChange={handleChangeforText} // Handle the change correctly
+                        value={formData.visaType || ''}
+                        onChange={handleChange}
                         displayEmpty
-                        name="visaType" // Ensure this corresponds to your state field
+                        name="visaType"
                         sx={{
                           minHeight: 50,
                           borderRadius: '8px',
                           border: '1px solid transparent',
                           transition: 'border 0.3s ease-in-out',
                           '&:hover': {
-                            border: '1px solid #d3d3d3', // Light ash border on hover
+                            border: '1px solid #d3d3d3',
                           },
                         }}
                       >
-                        <MenuItem value="" disabled>
-                          -- Select Visa Type --
-                        </MenuItem>
                         {visaTypes.map((type) => (
-                          <MenuItem key={type} value={type}>
-                            {type}
-                          </MenuItem>
+                          <MenuItem key={type} value={type}>{type}</MenuItem>
                         ))}
                       </Select>
-                      {errors.visaType && <Typography variant="body2" color="error" sx={{ fontSize: '0.875rem', marginTop: '4px' }}>
-                        {errors.visaType}
-                      </Typography>}
+                      {errors.visaType && (
+                        <Typography color="error" variant="body2" sx={{ fontSize: '0.75rem' }}>
+                          {errors.visaType}
+                        </Typography>
+                      )}
+
+
                     </FormControl>
+                  )}
 
+                  {step === 2 && (
+                    <>
+                      <TextField fullWidth label="First Name" name="firstName" value={formData.firstName} onChange={handleChange} margin="normal" error={!!errors.firstName} helperText={errors.firstName} />
+                      <TextField fullWidth label="Last Name" name="lastName" value={formData.lastName} onChange={handleChange} margin="normal" error={!!errors.lastName} helperText={errors.lastName} />
+                      <TextField fullWidth label="Email" name="email" value={formData.email} onChange={handleChange} margin="normal" error={!!errors.email} helperText={errors.email} />
 
+                      <TextField fullWidth label="Mobile No" name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} margin="normal" error={!!errors.mobileNumber} helperText={errors.mobileNumber} />
+                      <TextField fullWidth label="Passport No" name="passportNumber" value={formData.passportNumber} onChange={handleChange} margin="normal" error={!!errors.passportNumber} helperText={errors.passportNumber} />
 
+                      <FormControl fullWidth margin="normal">
+                        <InputLabel>Nationality</InputLabel>
+                        <Select
+                          value={formData.nationality || ''}
+                          onChange={handleChange}
+                          displayEmpty
+                          name="nationality"
+                          sx={{
+                            minHeight: 50,
+                            borderRadius: '8px',
+                            border: '1px solid transparent',
+                            transition: 'border 0.3s ease-in-out',
+                            '&:hover': {
+                              border: '1px solid #d3d3d3',
+                            },
+                          }}
+                        >
+                          {nationalities.map((type) => (
+                            <MenuItem key={type} value={type}>{type}</MenuItem>
+                          ))}
+                        </Select>
+                        {errors.nationality && (
+                          <Typography color="error" variant="body2" sx={{ fontSize: '0.75rem' }}>
+                            {errors.nationality}
+                          </Typography>
+                        )}
 
+                      </FormControl>
 
+                      <TextField fullWidth label="Address" name="address" value={formData.address} onChange={handleChange} margin="normal" error={!!errors.address} helperText={errors.address} />
+                    </>
+                  )}
 
-
-
-
-                    <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
-                      <Button
-                        variant="contained"
-                        onClick={handleNext}
-                        sx={{
-                          mt: 2,
-                          color: "white", // Ensure text is clearly visible
-                          backgroundColor: "#1976d2", // Primary blue background
-                          "&:hover": {
-                            backgroundColor: "#1565c0", // Darker blue on hover
-                          },
-                          "&:focus": { outline: "none" }, // Removes focus outline
-                          "&:active": {
-                            backgroundColor: "#1565c0",
-                            border: "1px solid #bdbdbd", // Ash-colored border on click
-                          },
-                        }}
-                        endIcon={<ArrowForwardIcon />}
-                      >
-                        Next
-                      </Button>
-                    </Box>
-
-                  </>
-                )}
-
-                {step === 2 && (
-                  <>
-                    <TextField
-                      fullWidth
-                      label="First Name"
-                      name="firstName"
-                      onChange={handleChangeforText}
-                      required
-                      margin="normal"
-                    />
-                    {errors.firstName && <Typography variant="body2" color="error" sx={{ fontSize: '0.875rem', marginTop: '4px' }}>
-                      {errors.firstName}
-                    </Typography>}
-                    <TextField
-                      fullWidth
-                      label="Last Name"
-                      name="lastName"
-                      onChange={handleChangeforText}
-                      required
-                      margin="normal"
-                    />
-                    {errors.lastName && <Typography variant="body2" color="error" sx={{ fontSize: '0.875rem', marginTop: '4px' }}>
-                      {errors.lastName}
-                    </Typography>}
-                    <TextField
-                      fullWidth
-                      label="Email"
-                      name="email"
-                      type="email"
-                      onChange={handleChangeforText}
-                      required
-                      margin="normal"
-                    />
-                    {errors.email && <Typography variant="body2" color="error" sx={{ fontSize: '0.875rem', marginTop: '4px' }}>
-                      {errors.email}
-                    </Typography>}
-                    <TextField
-                      fullWidth
-                      label="Mobile Number"
-                      name="mobileNumber"
-                      onChange={handleChangeforText}
-                      required
-                      margin="normal"
-                    />
-                    {errors.mobileNumber && <Typography variant="body2" color="error" sx={{ fontSize: '0.875rem', marginTop: '4px' }}>
-                      {errors.mobileNumber}
-                    </Typography>}
-                    <TextField
-                      fullWidth
-                      label="Passport Number"
-                      name="passportNumber"
-                      onChange={handleChangeforText}
-                      required
-                      margin="normal"
-                    />
-                    {errors.passportNumber && <Typography variant="body2" color="error" sx={{ fontSize: '0.875rem', marginTop: '4px' }}>
-                      {errors.passportNumber}
-                    </Typography>}
-
-                    <FormControl fullWidth margin="normal" sx={{ minWidth: 120 }}>
-                      <InputLabel shrink={formData.nationality !== ''} required>Nationality</InputLabel>
-                      <Select
-                        name="nationality"
-                        value={formData.nationality}
-                        onChange={handleChangeforText}
+                  {step === 3 && (
+                    <>
+                      <TextField
+                        fullWidth
+                        label="Travel From"
+                        name="travelFrom"
+                        type="date"
+                        value={formData.travelFrom}
+                        onChange={handleChange}
                         required
-                        sx={{
-                          '& .MuiSelect-select': {
-                            padding: '12px 14px', // Adjust padding to match TextField
-                            height: '40px', // Set height to match TextField
-                            display: 'flex',
-                            alignItems: 'center', // Centers the text vertically
-                          },
-                          '& .MuiInputBase-root': {
-                            height: '56px', // Ensure overall height for label and input field
-                            display: 'flex',
-                            alignItems: 'center', // Centers the text vertically
-                          },
-                          '& .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'rgba(0, 0, 0, 0.23)', // Border color when not focused
-                          },
-                          '&:hover .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'rgba(0, 0, 0, 0.87)', // Border color on hover
-                          },
-                        }}
-                      >
-                        {nationalities.map((nation) => (
-                          <MenuItem key={nation} value={nation}>{nation}</MenuItem>
-                        ))}
-                      </Select>
-                      {errors.nationality && <Typography variant="body2" color="error" sx={{ fontSize: '0.875rem', marginTop: '4px' }}>
-                        {errors.nationality}
-                      </Typography>}
-                    </FormControl>
+                        margin="normal"
+                        InputLabelProps={{ shrink: true }}
+                        error={!!errors.travelFrom} helperText={errors.travelFrom}
+                      />
+                      <TextField
+                        fullWidth
+                        label="Travel To"
+                        name="travelTo"
+                        type="date"
+                        value={formData.travelTo}
+                        onChange={handleChange}
+                        required
+                        margin="normal"
+                        InputLabelProps={{ shrink: true }}
+                        error={!!errors.travelTo} helperText={errors.travelTo}
+                      />
+                    </>
+                  )}
 
-
-                    <TextField
-                      fullWidth
-                      label="Address"
-                      name="address"
-                      onChange={handleChangeforText}
-                      required
-                      margin="normal"
-                    />
-                    {errors.address && <Typography variant="body2" color="error" sx={{ fontSize: '0.875rem', marginTop: '4px' }}>
-                      {errors.address}
-                    </Typography>}
-
-                    <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-                      <Button
-                        variant="outlined"
-                        onClick={handlePrevious}
-                        sx={{
-                          mt: 2,
-                          mr: 1,
-                          color: "#1976d2", // Primary blue text color
-                          border: "1px solid #1976d2", // Blue border instead of pink
-                          "&:hover": {
-                            backgroundColor: "rgba(25, 118, 210, 0.08)", // Light blue background on hover
-                            borderColor: "#1565c0", // Darker blue border on hover
-                          },
-                          "&:focus": { outline: "none" }, // Removes focus outline
-                          "&:active": { border: "1px solid #bdbdbd", color: "#333" }, // Ash border on click
-                        }}
-                        startIcon={<ArrowBackIcon />}
-                      >
-                        Previous
-                      </Button>
-
+                  {step === 4 && (
+                    <>
+                      {/* Upload Passport */}
                       <Button
                         variant="contained"
-                        onClick={handleNext}
-                        sx={{
-                          mt: 2,
-                          color: "white", // Ensure text is clearly visible
-                          backgroundColor: "#1976d2", // Primary blue background
-                          "&:hover": {
-                            backgroundColor: "#1565c0", // Darker blue on hover
-                          },
-                          "&:focus": { outline: "none" }, // Removes focus outline
-                          "&:active": {
-                            backgroundColor: "#1565c0",
-                            border: "1px solid #bdbdbd", // Ash-colored border on click
-                          },
-                        }}
-                        endIcon={<ArrowForwardIcon />}
+                        component="label"
+                        startIcon={<CloudUploadIcon />}
+                        sx={{ mb: 2, backgroundColor: "#D3D3D3", '&:hover': { backgroundColor: "#A9A9A9" } }}
                       >
-                        Next
+                        Upload Passport
+                        <input
+                          type="file"
+                          hidden
+                          onChange={(e) => handleFileChange(e, "passportFile")}
+                          required
+                        />
                       </Button>
-                    </Box>
-
-                  </>
-                )}
-
-                {step === 3 && (
-                  <>
-                    <TextField
-                      fullWidth
-                      label="Travel From"
-                      name="travelFrom"
-                      type="date"
-                      onChange={handleChangeforText}
-                      required
-                      margin="normal"
-                      InputLabelProps={{ shrink: true }} // Ensures label is visible
-                    />
-                    {errors.travelFrom && <Typography variant="body2" color="error" sx={{ fontSize: '0.875rem', marginTop: '4px' }}>
-                      {errors.travelFrom}
-                    </Typography>}
-                    <TextField
-                      fullWidth
-                      label="Travel To"
-                      name="travelTo"
-                      type="date"
-                      onChange={handleChangeforText}
-                      required
-                      margin="normal"
-                      InputLabelProps={{ shrink: true }}
-                    />
-                    {errors.travelTo && <Typography variant="body2" color="error" sx={{ fontSize: '0.875rem', marginTop: '4px' }}>
-                      {errors.travelTo}
-                    </Typography>}
-                    <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-                      <Button
-                        variant="outlined"
-                        onClick={handlePrevious}
-                        sx={{
-                          mt: 2,
-                          mr: 1,
-                          color: "#1976d2", // Primary blue text color
-                          border: "1px solid #1976d2", // Blue border instead of pink
-                          "&:hover": {
-                            backgroundColor: "rgba(25, 118, 210, 0.08)", // Light blue background on hover
-                            borderColor: "#1565c0", // Darker blue border on hover
-                          },
-                          "&:focus": { outline: "none" }, // Removes focus outline
-                          "&:active": { border: "1px solid #bdbdbd", color: "#333" }, // Ash border on click
-                        }}
-                        startIcon={<ArrowBackIcon />}
-                      >
-                        Previous
-                      </Button>
-
-                      <Button
-                        variant="contained"
-                        onClick={handleNext}
-                        sx={{
-                          mt: 2,
-                          color: "white", // Ensure text is clearly visible
-                          backgroundColor: "#1976d2", // Primary blue background
-                          "&:hover": {
-                            backgroundColor: "#1565c0", // Darker blue on hover
-                          },
-                          "&:focus": { outline: "none" }, // Removes focus outline
-                          "&:active": {
-                            backgroundColor: "#1565c0",
-                            border: "1px solid #bdbdbd", // Ash-colored border on click
-                          },
-                        }}
-                        endIcon={<ArrowForwardIcon />}
-                      >
-                        Next
-                      </Button>
-                    </Box>
-                  </>
-
-                )}
-                {step === 4 && (
-                  <>
-                    <Typography variant="h6" mt={2}>
-                      Upload Required Documents
-                    </Typography>
-
-                    <Grid container spacing={2} sx={{ mt: 2 }}>
-                      {[
-                        { name: "passportFile", label: "Upload Passport Copy" },
-                        { name: "photoFile", label: "Upload Photo" },
-                        { name: "ticketFile", label: "Upload Ticket" },
-                        { name: "hotelBookingFile", label: "Upload Hotel Booking" },
-                      ].map((file, index) => (
-                        <Grid item xs={12} sm={6} key={index}>
-                          <Button
-                            component="label"
-                            variant="contained"
-                            fullWidth
-                            startIcon={<CloudUploadIcon />}
-                            sx={{
-                              height: 90,
-                              padding: "8px",
-                              fontSize: "0.875rem",
-                              display: "flex",
-                              flexDirection: "column",
-                              justifyContent: "center",
-                              textAlign: "center",
-                              backgroundColor: "#f5f5f5",
-                              color: "#333",
-                              "&:hover": { backgroundColor: "#e0e0e0" },
-                            }}
-                          >
-                            {formData[file.name] ? (
-                              <>
-                                ✅ {formData[file.name].name}
-                              </>
-                            ) : (
-                              file.label
-                            )}
-                            <VisuallyHiddenInput
-                              type="file"
-                              name={file.name}
-                              onChange={(e) => handleFileChange(e, file.name)}
-                            />
-                          </Button>
-
-                          {/* Display the uploaded file name below the button */}
-                          {/* {formData[file.name] && (
-                            <Typography variant="body2" sx={{ mt: 1, textAlign: "center", color: "#1976d2" }}>
-                              {formData[file.name].name}
-                            </Typography>
-                          )} */}
-
-                          {errors[file.name] && (
-                            <Typography
-                              variant="body2"
-                              sx={{ mt: 1, textAlign: "center", color: "red", fontSize: "0.875rem" }}
-                            >
-                              {errors[file.name]}
-                            </Typography>
-                          )}
-                        </Grid>
-                      ))}
-                    </Grid>
-
-                    <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-                      <Button
-                        variant="outlined"
-                        onClick={handlePrevious}
-                        sx={{
-                          mt: 2,
-                          mr: 1,
-                          color: "#1976d2",
-                          border: "1px solid #1976d2",
-                          "&:hover": {
-                            backgroundColor: "rgba(25, 118, 210, 0.08)",
-                            borderColor: "#1565c0",
-                          },
-                          "&:focus": { outline: "none" },
-                          "&:active": { border: "1px solid #bdbdbd", color: "#333" },
-                        }}
-                        startIcon={<ArrowBackIcon />}
-                      >
-                        Previous
-                      </Button>
-
-                      <Button
-                        variant="contained"
-                        onClick={handleSubmit}
-                        sx={{
-                          mt: 2,
-                          color: "white",
-                          backgroundColor: "#1976d2",
-                          "&:hover": { backgroundColor: "#1565c0" },
-                          "&:focus": { outline: "none" },
-                          "&:active": {
-                            backgroundColor: "#1565c0",
-                            border: "1px solid #bdbdbd",
-                          },
-                        }}
-                        endIcon={<ArrowForwardIcon />}
-                      >
-                        Submit
-                      </Button>
-                    </Box>
-                  </>
-                )}
-
-                {step === 5 && (
-                  <>
-                    <Typography variant="h6" mt={2}>
-                      Select Payment Method
-                    </Typography>
-
-                    <Grid container spacing={2} sx={{ mt: 2 }}>
-                      {/* Payment Method Selection */}
-                      <Grid item xs={12}>
-                        <FormControl fullWidth variant="outlined">
-                          <Select
-                            value={paymentMethod}
-                            onChange={handlePaymentMethodChange}
-                            displayEmpty
-                            inputProps={{ "aria-label": "Payment method" }}
-                          >
-                            <MenuItem value="credit-card">Credit Card</MenuItem>
-                            <MenuItem value="paypal">PayPal</MenuItem>
-                            <MenuItem value="bank-transfer">Bank Transfer</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </Grid>
-
-                      {/* Payment Details */}
-                      {paymentMethod === "credit-card" && (
-                        <>
-                          <Grid item xs={12}>
-                            <TextField
-                              label="Card Number"
-                              variant="outlined"
-                              fullWidth
-                              value={cardNumber}
-                              onChange={handleCardNumberChange}
-                              type="text"
-                            />
-                          </Grid>
-                          <Grid item xs={6}>
-                            <TextField
-                              label="Expiry Date"
-                              variant="outlined"
-                              fullWidth
-                              value={expiryDate}
-                              onChange={handleExpiryDateChange}
-                              type="text"
-                            />
-                          </Grid>
-                          <Grid item xs={6}>
-                            <TextField
-                              label="CVV"
-                              variant="outlined"
-                              fullWidth
-                              value={cvv}
-                              onChange={handleCvvChange}
-                              type="text"
-                            />
-                          </Grid>
-                        </>
+                      {formData.passportFile && (
+                        <Typography
+                          variant="body2"
+                          color="secondary"
+                          sx={{
+                            maxWidth: "300px", // Adjust the width as per your design
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {formData.passportFile.name} uploaded
+                        </Typography>
                       )}
+                      {errors.passportFile && <Typography color="error" variant="body2">{errors.passportFile}</Typography>}
 
-                    
-
-                      {paymentMethod === "bank-transfer" && (
-                        <Grid item xs={12}>
-                          <Typography variant="body1">Please transfer the amount to the bank account details provided below:</Typography>
-                          <Typography variant="body2">Bank Name: XYZ Bank</Typography>
-                          <Typography variant="body2">Account Number: 123456789</Typography>
-                        </Grid>
-                      )}
-                    </Grid>
-
-                    {/* Payment Action Button */}
-                    <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-                      <Button
-                        variant="outlined"
-                        onClick={handlePrevious}
-                        sx={{
-                          mt: 2,
-                          mr: 1,
-                          color: "#1976d2", // Primary blue text color
-                          border: "1px solid #1976d2", // Blue border instead of pink
-                          "&:hover": {
-                            backgroundColor: "rgba(25, 118, 210, 0.08)", // Light blue background on hover
-                            borderColor: "#1565c0", // Darker blue border on hover
-                          },
-                          "&:focus": { outline: "none" }, // Removes focus outline
-                          "&:active": { border: "1px solid #bdbdbd", color: "#333" }, // Ash border on click
-                        }}
-                        startIcon={<ArrowBackIcon />}
-                      >
-                        Previous
-                      </Button>
-
+                      {/* Upload Photo */}
                       <Button
                         variant="contained"
-                        onClick={handlePaymentSubmit}
-                        sx={{
-                          mt: 2,
-                          backgroundColor: "#1976d2", // Blue background
-                          "&:hover": {
-                            backgroundColor: "#1565c0", // Darker blue background on hover
-                          },
-                        }}
+                        component="label"
+                        startIcon={<CloudUploadIcon />}
+                        sx={{ mb: 2, backgroundColor: "#D3D3D3", '&:hover': { backgroundColor: "#A9A9A9" } }}
                       >
-                        Proceed to Payment
+                        Upload Photo
+                        <input
+                          type="file"
+                          hidden
+                          onChange={(e) => handleFileChange(e, "photoFile")}
+                          required
+                        />
                       </Button>
-                    </Box>
-                  </>
-                )}
+                      {formData.photoFile && (
+                        <Typography
+                          variant="body2"
+                          color="secondary"
+                          sx={{
+                            maxWidth: "300px", // Adjust the width as per your design
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {formData.photoFile.name} uploaded
+                        </Typography>
+                      )}
+                      {errors.photoFile && <Typography color="error" variant="body2">{errors.photoFile}</Typography>}
+
+                      {/* Upload Ticket */}
+                      <Button
+                        variant="contained"
+                        component="label"
+                        startIcon={<CloudUploadIcon />}
+                        sx={{ mb: 2, backgroundColor: "#D3D3D3", '&:hover': { backgroundColor: "#A9A9A9" } }}
+                      >
+                        Upload Ticket
+                        <input
+                          type="file"
+                          hidden
+                          onChange={(e) => handleFileChange(e, "ticketFile")}
+                          required
+                        />
+                      </Button>
+                      {formData.ticketFile && (
+                        <Typography
+                          variant="body2"
+                          color="secondary"
+                          sx={{
+                            maxWidth: "300px", // Adjust the width as per your design
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {formData.ticketFile.name} uploaded
+                        </Typography>
+                      )}
+                      {errors.ticketFile && <Typography color="error" variant="body2">{errors.ticketFile}</Typography>}
+
+                      {/* Upload Hotel Booking Receipt */}
+                      <Button
+                        variant="contained"
+                        component="label"
+                        startIcon={<CloudUploadIcon />}
+                        sx={{ mb: 2, backgroundColor: "#D3D3D3", '&:hover': { backgroundColor: "#A9A9A9" } }}
+                      >
+                        Upload Hotel Booking Receipt
+                        <input
+                          type="file"
+                          hidden
+                          onChange={(e) => handleFileChange(e, "hotelBookingFile")}
+                          required
+                        />
+                      </Button>
+                      {formData.hotelBookingFile && (
+                        <Typography
+                          variant="body2"
+                          color="secondary"
+                          sx={{
+                            maxWidth: "300px", // Adjust the width as per your design
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {formData.hotelBookingFile.name} uploaded
+                        </Typography>
+                      )}
+                      {errors.hotelBookingFile && <Typography color="error" variant="body2">{errors.hotelBookingFile}</Typography>}
+
+                      {/* Show success message */}
+                      {uploadSuccess && <Typography color="success.main">Files uploaded successfully!</Typography>}
+                    </>
 
 
+                  )}
 
-              </form>
+                  {step === 5 && (
+                    <Elements stripe={stripePromise}>
+                      <PaymentForm />
+                    </Elements>
+                  )}
+
+                  <Box mt={3} display="flex" justifyContent="space-between">
+                    {step > 1 && <Button startIcon={<ArrowBackIcon />} onClick={handlePrevious}>Back</Button>}
+                    {step < 4 && <Button endIcon={<ArrowForwardIcon />} onClick={handleNext}>Next</Button>}
+                    {step === 4 && <Button variant="contained" onClick={handleSubmit}>Submit</Button>}
+                  </Box>
+                </Card>
+              </Container>
             </Card>
           </Grid>
         </Grid>
@@ -867,3 +491,12 @@ function Application() {
 }
 
 export default Application;
+
+
+
+
+
+
+
+
+
