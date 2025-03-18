@@ -23,7 +23,7 @@ import axios from 'axios';
         // Send the token to the backend for processing
         try {
         await axios.post(
-                "http://localhost:5000/api/visa/pay",
+                "http://localhost:5001/api/visa/pay",
                 {
                     amount: 100, // Amount in cents (e.g., 100 = $1.00)
                     currency: "usd",
@@ -35,6 +35,7 @@ import axios from 'axios';
                     }
                 }
             );
+          alert("payment success")
 
         
         } catch (err) {

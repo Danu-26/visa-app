@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import MKBox from "components/MKBox";
@@ -6,12 +8,37 @@ import MKTypography from "components/MKTypography";
 import MKInput from "components/MKInput";
 import MKButton from "components/MKButton";
 
-// import bgImage from "assets/images/bg-sign-in-basic.jpeg";
-
 function SignUp() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState(""); // Store error messages
+  const navigate = useNavigate();
+
+  const handleSignUp = async () => {
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    try {
+      const response = await axios.post("http://localhost:5001/api/visa/register", {
+        name,
+        email,
+        password,
+      });
+
+      if (response.status === 201) {
+        navigate("/signin"); // Redirect to sign-in page after successful signup
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || "Registration failed");
+    }
+  };
+
   return (
     <>
-
       <MKBox
         position="absolute"
         top={0}
@@ -20,8 +47,6 @@ function SignUp() {
         minHeight="100vh"
         sx={{
           backgroundColor: "#f2f2f2",
-          backgroundSize: "cover",
-          backgroundPosition: "top",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -38,12 +63,23 @@ function SignUp() {
               </MKBox>
               <MKBox pt={4} pb={3} px={3}>
                 <MKBox component="form">
-                  <MKBox mb={2}><MKInput type="text" label="Name" fullWidth /></MKBox>
-                  <MKBox mb={2}><MKInput type="email" label="Email" fullWidth /></MKBox>
-                  <MKBox mb={2}><MKInput type="password" label="Password" fullWidth /></MKBox>
-                  <MKBox mb={2}><MKInput type="password" label="Confirm Password" fullWidth /></MKBox>
+                  {error && <MKTypography color="error" textAlign="center">{error}</MKTypography>}
+                  <MKBox mb={2}>
+                    <MKInput type="text" label="Name" fullWidth value={name} onChange={(e) => setName(e.target.value)} />
+                  </MKBox>
+                  <MKBox mb={2}>
+                    <MKInput type="email" label="Email" fullWidth value={email} onChange={(e) => setEmail(e.target.value)} />
+                  </MKBox>
+                  <MKBox mb={2}>
+                    <MKInput type="password" label="Password" fullWidth value={password} onChange={(e) => setPassword(e.target.value)} />
+                  </MKBox>
+                  <MKBox mb={2}>
+                    <MKInput type="password" label="Confirm Password" fullWidth value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+                  </MKBox>
                   <MKBox mt={4} mb={1}>
-                    <MKButton variant="gradient" color="info" fullWidth>Sign up</MKButton>
+                    <MKButton variant="gradient" color="info" fullWidth onClick={handleSignUp}>
+                      Sign up
+                    </MKButton>
                   </MKBox>
                   <MKBox mt={3} textAlign="center">
                     <MKTypography variant="button" color="text">
@@ -59,7 +95,6 @@ function SignUp() {
           </Grid>
         </Grid>
       </MKBox>
-   
     </>
   );
 }
