@@ -20,10 +20,15 @@ function AdminNavBar() {
     const handleMenuClose = () => setAnchorEl(null);
 
     const handleLogout = () => {
+        // Remove the token and user data from localStorage
         localStorage.removeItem("token");
         localStorage.removeItem("user");
+
+        // Update the logged-in state
         setIsLoggedIn(false);
-        navigate("/"); // Redirect to home page after logout
+
+        // Redirect to the home page
+        navigate("/"); // You can change the route to wherever you want to redirect
     };
 
     return (

@@ -1,5 +1,6 @@
+
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import axios from "axios";
 import Card from "@mui/material/Card";
 
@@ -62,13 +63,13 @@ function SignIn() {
                   <MKBox mb={2}>
                     <MKInput type="password" label="Password" fullWidth value={password} onChange={(e) => setPassword(e.target.value)} />
                   </MKBox>
-             
+
                   <MKBox mt={4} mb={1}>
                     <MKButton variant="gradient" color="info" fullWidth onClick={handleLogin}>
                       Sign in
                     </MKButton>
                   </MKBox>
-                  <MKBox mt={3} textAlign="center">
+                  {/* <MKBox mt={3} textAlign="center">
                     <MKTypography variant="button" color="text">
                       Don&apos;t have an account?{" "}
                       <MKTypography component={Link} to="/signup" variant="button" color="info"
@@ -76,7 +77,7 @@ function SignIn() {
                         Sign up
                       </MKTypography>
                     </MKTypography>
-                  </MKBox>
+                  </MKBox> */}
                 </MKBox>
               </MKBox>
             </Card>

@@ -55,6 +55,7 @@ import ApplicationViewByAdminPage from "layouts/pages/admin/admin-home";
 import UserAuthDetails from "layouts/pages/admin/user-details";
 import NewsPage from "pages/Admin/NewsPage";
 import AdminProfile from "pages/Admin/Profile";
+import ViewStatus from "pages/LandingPages/StepByStep/viewStatus.js";
 // Sections
 import PageHeaders from "layouts/sections/page-sections/page-headers";
 import Features from "layouts/sections/page-sections/featuers";
@@ -121,32 +122,37 @@ const routes = [
             route: "/trackyourapplication",
             component: <TrackPage />,
           },
-           {
+          {
             name: "stepguide",
             route: "/stepbystep",
             component: <StepByStepGuidePage />,
           },
-             {
+          {
             name: "application",
             route: "/startyourapplication",
             component: <ApplicationPage />,
           },
-             {
+          {
             name: "sign in",
-             route: "/signin",
-              component: <SignInPage />,
-               },
-                {
+            route: "/signin",
+            component: <SignInPage />,
+          },
+          {
             name: "sign up",
-             route: "/signup",
-              component: <SignUpPage />,
-               },
-                     {
+            route: "/signup",
+            component: <SignUpPage />,
+          },
+          {
             name: "view price",
-             route: "/view/visapaymentsdetails",
-              component: <ViewPriceDetails />,
-               },
-              
+            route: "/view/visapaymentsdetails",
+            component: <ViewPriceDetails />,
+          },
+          {
+            name: "view application staus",
+            route: "/view/visastatus",
+            component: <ViewStatus />,
+          },
+
         ],
       },
       // {

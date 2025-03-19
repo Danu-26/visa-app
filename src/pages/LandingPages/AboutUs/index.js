@@ -7,7 +7,7 @@ import Card from "@mui/material/Card";
 // Material Kit 2 React components
 import MKBox from "components/MKBox";
 import MKTypography from "components/MKTypography";
-import MKButton from "components/MKButton";
+
 
 // Material Kit 2 React examples
 import DefaultNavbar from "examples/DefaultNavbar";
@@ -21,7 +21,7 @@ import Team from "pages/LandingPages/AboutUs/sections/Team";
 import routes from "routes";
 import footerRoutes from "footer.routes";
 
-import { Link } from 'react-router-dom';
+
 
 // Images
 // import bgImage from "assets/images/bg-about-us.jpg";
@@ -76,14 +76,10 @@ function AboutUs() {
             >
               Helping You Travel with Confidence
             </MKTypography>
-            <MKTypography variant="body1" color="white" opacity={0.8} mt={1} mb={3}>
+            <MKTypography variant="body1" color="white" opacity={0.8} mt={1} mb={1}>
               Your Trusted Partner in Visa Applications
             </MKTypography>
-            <Link to="/signin" style={{ textDecoration: 'none' }}>
-              <MKButton color="default" sx={{ color: ({ palette: { dark } }) => dark.main }}>
-                Create Account
-              </MKButton>
-            </Link>
+       
             <MKTypography variant="h6" color="white" mt={8} mb={1} sx={{ textAlign: 'center' }}>
               Find us on
             </MKTypography>

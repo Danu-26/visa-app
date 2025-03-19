@@ -76,9 +76,9 @@ function Information() {
               description="Our goal is to provide an easy-to-use platform that makes visa applications simple and ensures they are processed on time"
               action={{
                 type: "internal",
-                route: "/",
+                route: "//view/visapaymentsdetails",
                 color: "info",
-                label: "find out more",
+                label: "find visa price",
               }}
             />
           </Grid>
