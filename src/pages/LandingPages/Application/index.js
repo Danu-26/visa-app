@@ -10,8 +10,9 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
-
-
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import CircularProgress from '@mui/material/CircularProgress';
 import DefaultNavbar from "examples/DefaultNavbar";
 import DefaultFooter from "examples/Footers/DefaultFooter";
 import CenteredBlogCard from "examples/Cards/BlogCards/CenteredBlogCard";
@@ -29,7 +30,11 @@ const nationalities = ["Sri Lanka", "India", "Pakistan", "Bangladesh"];
 function Application() {
   const [step, setStep] = useState(1);
   const [errors, setErrors] = useState({});
-  const [uploadSuccess, setUploadSuccess] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  // const [uploadSuccess, setUploadSuccess] = useState(false);
   const [formData, setFormData] = useState({
     visaType: "",
     firstName: "",
@@ -128,17 +133,23 @@ function Application() {
     Object.keys(formData).forEach((key) => {
       if (formData[key]) data.append(key, formData[key]);
     });
-
+    setLoading(true); // Start loading
     try {
       await axios.post("http://localhost:5001/api/visa/upload", data, { headers: { "Content-Type": "multipart/form-data" } });
-      setUploadSuccess(true);
+      setOpenSnackbar(true);
+  
       setTimeout(() => {
         setStep(5); // Move to Payment Step
       }, 2000);
     } catch (error) {
       console.error("Upload failed", error);
+      setLoading(false);
     }
   };
+
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
 
   return (
     <>
@@ -460,7 +471,21 @@ function Application() {
                       {errors.hotelBookingFile && <Typography color="error" variant="body2">{errors.hotelBookingFile}</Typography>}
 
                       {/* Show success message */}
-                      {uploadSuccess && <Typography color="success.main">Files uploaded successfully!</Typography>}
+                      <Snackbar
+                        open={openSnackbar}
+                        autoHideDuration={6000} // Adjust duration as needed
+                        onClose={() => setOpenSnackbar(false)}
+                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }} // Positioning at top-center
+                        sx={{ mt: 8,ml:12 }} // Additional margin-top for better spacing
+                      >
+                        <Alert
+                          onClose={() => setOpenSnackbar(false)}
+                          severity="success"
+                          sx={{ width: '100%' }} // Ensure full width for better UI
+                        >
+                          Files uploaded successfully!
+                        </Alert>
+                      </Snackbar>
                     </>
 
 
@@ -475,7 +500,14 @@ function Application() {
                   <Box mt={3} display="flex" justifyContent="space-between">
                     {step > 1 && <Button startIcon={<ArrowBackIcon />} onClick={handlePrevious}>Back</Button>}
                     {step < 4 && <Button endIcon={<ArrowForwardIcon />} onClick={handleNext}>Next</Button>}
-                    {step === 4 && <Button variant="contained" onClick={handleSubmit}>Submit</Button>}
+                    {step === 4 && <Button
+                      variant="contained"
+                      onClick={handleSubmit}
+                      disabled={loading} // Disable the button when loading
+                      endIcon={loading ? <CircularProgress size={24} color="inherit" /> : <ArrowForwardIcon />}
+                    >
+                      {loading ? "Submitting..." : "Submit"}
+                    </Button>}
                   </Box>
                 </Card>
               </Container>
@@ -491,12 +523,3 @@ function Application() {
 }
 
 export default Application;
-
-
-
-
-
-
-
-
-

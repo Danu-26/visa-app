@@ -1,10 +1,10 @@
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import axios from 'axios';
-
+import { useNavigate } from "react-router-dom";
  export default function PaymentForm() {
     const stripe = useStripe();
     const elements = useElements();
-
+  const navigate = useNavigate();
     const handlePayment = async () => {
         if (!stripe || !elements) {
             alert("Stripe has not been loaded yet. Please try again later.");
@@ -36,6 +36,7 @@ import axios from 'axios';
                 }
             );
           alert("payment success")
+          navigate('/')
 
         
         } catch (err) {

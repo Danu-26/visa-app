@@ -9,22 +9,53 @@ import MKTypography from "components/MKTypography";
 import AdminNavBar from "pages/Admin/AdminNavBar";
 import DefaultFooter from "examples/Footers/DefaultFooter";
 import footerRoutes from "footer.routes";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 function NewsPage() {
-    const [newsList, setNewsList] = useState([]); // Removed default news items
+    const [newsList, setNewsList] = useState([]);
     const [newsData, setNewsData] = useState({ title: "", content: "", date: "" });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
 
     const handleChange = (e) => {
         setNewsData({ ...newsData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (newsData.title && newsData.content && newsData.date) {
-            setNewsList([...newsList, newsData]);
+        if (!newsData.title || !newsData.content || !newsData.date) return;
+
+        setLoading(true);
+        setError("");
+
+        try {
+            const response = await fetch("http://localhost:5001/api/visa/news", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(newsData),
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to add news");
+            }
+
+            const result = await response.json();
+            setNewsList((prevList) => [...prevList, result]); // Add the saved news to the list
             setNewsData({ title: "", content: "", date: "" });
+
+            // Show the snackbar with success message
+            setSnackbarMessage("News added successfully!");
+            setOpenSnackbar(true);
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
         }
     };
+
 
     return (
         <>
@@ -48,13 +79,27 @@ function NewsPage() {
                         <MKTypography variant="h4" gutterBottom>
                             Add Latest News
                         </MKTypography>
+                   
+                        <Snackbar
+                            open={openSnackbar}
+                            autoHideDuration={6000}
+                            onClose={() => setOpenSnackbar(false)}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                            sx={{ mt: 8 }} 
+                        >
+                            <MuiAlert onClose={() => setOpenSnackbar(false)} severity="success" sx={{ width: '100%' }}>
+                                {snackbarMessage}
+                            </MuiAlert>
+                        </Snackbar>
+                        {error && <MKTypography color="error">{error}</MKTypography>}
                         <form onSubmit={handleSubmit}>
                             <TextField fullWidth label="Title" name="title" value={newsData.title} onChange={handleChange} margin="normal" required />
                             <TextField fullWidth label="Content" name="content" multiline rows={4} value={newsData.content} onChange={handleChange} margin="normal" required />
                             <TextField fullWidth label="Date" name="date" type="date" InputLabelProps={{ shrink: true }} value={newsData.date} onChange={handleChange} margin="normal" required />
-                            <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
-                                Add News
+                            <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }} disabled={loading}>
+                                {loading ? "Adding..." : "Add News"}
                             </Button>
+                      
                         </form>
                     </Card>
                 </Container>
