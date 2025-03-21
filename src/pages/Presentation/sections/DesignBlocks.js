@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
 
 // @mui material components
@@ -16,12 +17,21 @@ import MKBox from "components/MKBox";
 import MKBadge from "components/MKBadge";
 import MKTypography from "components/MKTypography";
 
-// Data
-import data from "pages/Presentation/sections/data/designBlocksData";
-
 function DesignBlocks() {
   const [open, setOpen] = useState(false);
   const [selectedNews, setSelectedNews] = useState(null);
+  const [newsItems, setNewsItems] = useState([]); // State to store news items
+
+  // Fetch news data on component mount
+  useEffect(() => {
+    // Fetch the news data from the API
+    axios
+      .get("http://localhost:5001/api/visa/news")
+      .then((response) => {
+        setNewsItems(response.data); // Set the fetched news items to state
+      })
+      .catch((error) => console.error("Error fetching news:", error));
+  }, []);
 
   const handleOpen = (news) => {
     setSelectedNews(news);
@@ -33,79 +43,65 @@ function DesignBlocks() {
     setSelectedNews(null);
   };
 
-  const renderData = data.map(({ title, description, items }) => (
-    <Grid container spacing={3} sx={{ mb: 10 }} key={title}>
-      <Grid item xs={12} lg={3}>
-        <MKBox position="sticky" top="100px" pb={{ xs: 2, lg: 6 }}>
-          <MKTypography variant="h3" fontWeight="bold" color="primary" mb={1}>
-            {title}
+  const renderData = newsItems.map(({ title, content, date }) => (
+    <Grid item xs={12} sm={6} md={4} key={title}>
+
+      <Card
+        sx={{
+          p: 3,
+          maxWidth: "1000px", 
+          margin: "auto",
+          marginTop: 1,
+          borderRadius: "8px",
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+          transition: "transform 0.3s ease, box-shadow 0.3s ease",
+          backgroundColor: "#f9f9f9",
+          "&:hover": {
+            transform: "translateY(-5px)",
+            boxShadow: "0px 6px 15px rgba(0, 0, 0, 0.2)",
+          },
+        }}
+      >
+        <MKTypography
+          variant="h5"
+          fontWeight="bold"
+          mb={1}
+          sx={{ color: "#0d47a1", textTransform: "uppercase" }}
+        >
+          {title}
+        </MKTypography>
+        <MKTypography
+          variant="caption"
+          color="textSecondary"
+          fontStyle="italic"
+          display="block"
+          mb={1}
+        >
+          {date}
+        </MKTypography>
+        <MKTypography variant="body2" color="textSecondary" sx={{ lineHeight: "1.6" }}>
+          {content.substring(0, 130)}... {/* Show short preview */}
+        </MKTypography>
+        <Link
+          to="#"
+          style={{ textDecoration: "none" }}
+          onClick={() => handleOpen({ title, content, date })}
+        >
+          <MKTypography
+            variant="body2"
+            fontWeight="bold"
+            color="primary"
+            sx={{
+              display: "inline-block",
+              mt: 2,
+              transition: "color 0.3s ease",
+              "&:hover": { color: "#ff5722" },
+            }}
+          >
+            Read More →
           </MKTypography>
-          <MKTypography variant="body2" fontWeight="regular" color="secondary" mb={1} pr={2}>
-            {description}
-          </MKTypography>
-        </MKBox>
-      </Grid>
-      <Grid item xs={12} lg={9}>
-        <Grid container spacing={3}>
-          {items.map(({ name, content, date }) => (
-            <Grid item xs={12} md={6} key={name}>
-              <Card
-                sx={{
-                  p: 3,
-                  borderRadius: "8px",
-                  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                  backgroundColor: "#f9f9f9",
-                  "&:hover": {
-                    transform: "translateY(-5px)",
-                    boxShadow: "0px 6px 15px rgba(0, 0, 0, 0.2)",
-                  },
-                }}
-              >
-                <MKTypography
-                  variant="h5"
-                  fontWeight="bold"
-                  mb={1}
-                  sx={{ color: "#0d47a1", textTransform: "uppercase" }}
-                >
-                  {name}
-                </MKTypography>
-                <MKTypography
-                  variant="caption"
-                  color="textSecondary"
-                  fontStyle="italic"
-                  display="block"
-                  mb={1}
-                >
-                  {date}
-                </MKTypography>
-                <MKTypography variant="body2" color="textSecondary" sx={{ lineHeight: "1.6" }}>
-                  {content.substring(0, 80)}... {/* Show short preview */}
-                </MKTypography>
-                <Link
-                  to="#"
-                  style={{ textDecoration: "none" }}
-                  onClick={() => handleOpen({ name, content, date })}
-                >
-                  <MKTypography
-                    variant="body2"
-                    fontWeight="bold"
-                    color="primary"
-                    sx={{
-                      display: "inline-block",
-                      mt: 2,
-                      transition: "color 0.3s ease",
-                      "&:hover": { color: "#ff5722" },
-                    }}
-                  >
-                    Read More →
-                  </MKTypography>
-                </Link>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </Grid>
+        </Link>
+      </Card>
     </Grid>
   ));
 
@@ -152,7 +148,7 @@ function DesignBlocks() {
       {/* Modal for Full News Content */}
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
         <DialogTitle sx={{ fontWeight: "bold", color: "#0d47a1" }}>
-          {selectedNews?.name}
+          {selectedNews?.title}
         </DialogTitle>
         <DialogContent>
           <MKTypography variant="caption" color="textSecondary" fontStyle="italic" display="block">

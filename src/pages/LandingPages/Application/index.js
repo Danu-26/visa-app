@@ -497,7 +497,7 @@ function Application() {
                     </Elements>
                   )}
 
-                  <Box mt={3} display="flex" justifyContent="space-between">
+                  <Box mt={3} display="flex" justifyContent={step > 1 ? "space-between" : "flex-end"}>
                     {step > 1 && <Button startIcon={<ArrowBackIcon />} onClick={handlePrevious}>Back</Button>}
                     {step < 4 && <Button endIcon={<ArrowForwardIcon />} onClick={handleNext}>Next</Button>}
                     {step === 4 && <Button
@@ -509,6 +509,7 @@ function Application() {
                       {loading ? "Submitting..." : "Submit"}
                     </Button>}
                   </Box>
+
                 </Card>
               </Container>
             </Card>

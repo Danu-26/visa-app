@@ -30,7 +30,7 @@ function AdminHomeView() {
                     justifyContent: "center",
                     textAlign: "center",
                     px: { xs: 2, md: 6 },
-                    pt: { xs: 8, md: 6 }, // Adds padding to the top on mobile
+                    pt: { xs: 12, md: 10 }, // Adds padding to the top on mobile
                 }}
             >
                 <Container>
